@@ -1,6 +1,5 @@
 #include "view.h"
 
-
 void error_callback(int error, const char* description) {
 	fputs(description, stderr);
 }
@@ -14,6 +13,11 @@ View::View(int width, int height, const char* title): width(width), height(heigh
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwSwapInterval(1);
+
 	this->window = glfwCreateWindow(width, height, title, NULL, NULL);
 	if (!window) {
 		glfwTerminate();
@@ -21,6 +25,10 @@ View::View(int width, int height, const char* title): width(width), height(heigh
 	}
 	glfwMakeContextCurrent(this->window);
 	glfwSetKeyCallback(this->window, key_callback);
+
+	if (glewInit()!=GLEW_OK)
+		exit(EXIT_FAILURE);
+	std::cout << glGetString(GL_VERSION) << std::endl;
 }
 
 View::~View() {
