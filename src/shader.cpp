@@ -10,13 +10,13 @@ Shader::Shader(const char* vertexShader, const char* fragmentShader) {
 	glValidateProgram(program);
 	glDeleteShader(vs);
 	glDeleteShader(fs);
-	this->id = program;
+	m_id = program;
 }
 
-unsigned int Shader::getId() { return this->id; }
+unsigned int Shader::getId() { return m_id; }
 
 void Shader::bind() {
-	glUseProgram(this->id);
+	glUseProgram(m_id);
 }
 
 unsigned int Shader::compile(unsigned int type, const char* source) {

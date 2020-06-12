@@ -6,7 +6,7 @@
 
 class Shader {
 	private:
-		unsigned int id;
+		unsigned int m_id;
 	public:
 		Shader(const char* vertexShader, const char* fragmentShader) ;
 

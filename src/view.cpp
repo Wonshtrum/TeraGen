@@ -9,7 +9,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-View::View(int width, int height, const char* title): width(width), height(height) {
+View::View(int width, int height, const char* title): m_width(width), m_height(height) {
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
@@ -18,13 +18,13 @@ View::View(int width, int height, const char* title): width(width), height(heigh
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwSwapInterval(1);
 
-	this->window = glfwCreateWindow(width, height, title, NULL, NULL);
-	if (!window) {
+	m_window = glfwCreateWindow(m_width, m_height, title, NULL, NULL);
+	if (!m_window) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-	glfwMakeContextCurrent(this->window);
-	glfwSetKeyCallback(this->window, key_callback);
+	glfwMakeContextCurrent(m_window);
+	glfwSetKeyCallback(m_window, key_callback);
 
 	if (glewInit()!=GLEW_OK)
 		exit(EXIT_FAILURE);
@@ -32,16 +32,16 @@ View::View(int width, int height, const char* title): width(width), height(heigh
 }
 
 View::~View() {
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }
 
 bool View::render() {
-	glfwGetFramebufferSize(window, &this->width, &this->height);
+	glfwGetFramebufferSize(m_window, &m_width, &m_height);
 	//ratio = width / (float) height;
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, m_width, m_height);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glfwSwapBuffers(this->window);
+	glfwSwapBuffers(m_window);
 	glfwPollEvents();
-	return !glfwWindowShouldClose(this->window);
+	return !glfwWindowShouldClose(m_window);
 }

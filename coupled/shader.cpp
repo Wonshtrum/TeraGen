@@ -3,7 +3,7 @@
 
 class Shader {
 	private:
-		unsigned int id;
+		unsigned int m_id;
 	public:
 		Shader(const char* vertexShader, const char* fragmentShader) {
 			unsigned int program = glCreateProgram();
@@ -15,13 +15,13 @@ class Shader {
 			glValidateProgram(program);
 			glDeleteShader(vs);
 			glDeleteShader(fs);
-			this->id = program;
+			m_id = program;
 		}
 
-		unsigned int getId() { return this->id; }
+		unsigned int getId() { return m_id; }
 
 		void bind() {
-			glUseProgram(this->id);
+			glUseProgram(m_id);
 		}
 
 		static unsigned int compile(unsigned int type, const char* source) {

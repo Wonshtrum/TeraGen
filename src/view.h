@@ -11,8 +11,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 class View {
 	private:
-		int width, height;
-		GLFWwindow* window;
+		int m_width, m_height;
+		GLFWwindow* m_window;
 
 	public:
 		View(int width, int height, const char* title);
