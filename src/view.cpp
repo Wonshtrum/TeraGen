@@ -16,7 +16,6 @@ View::View(int width, int height, const char* title): m_width(width), m_height(h
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwSwapInterval(1);
 
 	m_window = glfwCreateWindow(m_width, m_height, title, NULL, NULL);
 	if (!m_window) {
@@ -28,7 +27,12 @@ View::View(int width, int height, const char* title): m_width(width), m_height(h
 
 	if (glewInit()!=GLEW_OK)
 		exit(EXIT_FAILURE);
+
+	glfwSwapInterval(1);
 	std::cout << glGetString(GL_VERSION) << std::endl;
+	glDisable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glClearColor(0.0, 1.0, 0.0, 1.0);
 }
 
 View::~View() {
@@ -36,11 +40,13 @@ View::~View() {
 	glfwTerminate();
 }
 
-bool View::render() {
+void View::clear() {
 	glfwGetFramebufferSize(m_window, &m_width, &m_height);
-	//ratio = width / (float) height;
 	glViewport(0, 0, m_width, m_height);
 	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+bool View::render() {
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 	return !glfwWindowShouldClose(m_window);

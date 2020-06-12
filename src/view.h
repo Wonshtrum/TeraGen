@@ -19,6 +19,8 @@ class View {
 
 		~View() ;
 
+		void clear() ;
+
 		bool render() ;
 };
 
