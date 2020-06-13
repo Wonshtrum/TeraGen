@@ -2,16 +2,16 @@ LIBS = -lGL -lGLU -lglfw3 -lGLEW -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -l
 GPP = g++ -std=c++11 -Wall
 GOO = $(GPP) -c
 GPY = coupled/extract.py
-RM = rm -if
+RM = rm -irf
 srcdir = src/
 srcpy = coupled/
 bindir = bin/
 docdir = doc/
 savedir = save/
-SRCPY = $(wildcard $(srcpy)*.cpp)
-SRC = $(wildcard $(srcdir)*.cpp)
-HEAD = $(wildcard $(srcdir)*.h)
-OBJ = $(subst $(srcdir), $(bindir), $(SRC:.cpp=.o))
+SRCPY := $(wildcard $(srcpy)*.cpp) $(wildcard $(srcpy)*/*.cpp)
+SRC := $(wildcard $(srcdir)*.cpp) $(wildcard $(srcdir)*/*.cpp)
+HEAD := $(wildcard $(srcdir)*.h) $(wildcard $(srcdir)*/*.h)
+OBJ := $(subst $(srcdir), $(bindir), $(SRC:.cpp=.o))
 PROG = Prog
 
 all = $(PROG)
@@ -20,20 +20,18 @@ $(PROG) : $(OBJ)
 	$(GPP) $^ -o $@ $(LIBS)
 
 $(bindir)%.o : $(srcdir)%.cpp
+	mkdir -p $(dir $@)
 	$(GOO) $^ -o $@
 
 $(srcdir)%.cpp : $(srcpy)%.cpp
 	$(GPY) $^
-
-.PHONY : all
-all :
-	make clean
-	make
+$(srcdir)%.h : $(srcpy)%.cpp
+	$(GPY) $^
 
 .PHONY : clean
 clean :
 	$(RM) $(bindir)*
 
 .PHONY : init
-init : 
+init :
 	mkdir src bin

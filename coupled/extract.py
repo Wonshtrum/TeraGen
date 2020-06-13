@@ -77,9 +77,10 @@ def extract(program):
 		if state == 0 and nameSpace:
 			nameSpace = ""
 
-	with open("src/"+name+".h", "w") as stream:
+	program = program.replace("coupled", "src").replace(".cpp", "")
+	with open(program+".h", "w") as stream:
 		stream.write(headerTemp.format(header))
-	with open("src/"+name+".cpp", "w") as stream:
+	with open(program+".cpp", "w") as stream:
 		stream.write(coreTemp.format(core))
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
-#include "view.h"
-#include "shader.h"
-#include "mesh.h"
+#include "graphics/view.h"
+#include "graphics/shader.h"
+#include "graphics/mesh.h"
 
 int main(void) {
 		View view(640, 480, "Simple example");
