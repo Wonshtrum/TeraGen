@@ -1,5 +1,7 @@
 #include <GL/glew.h>
 #include <iostream>
+#include <fstream>
+#include "utils.h"
 
 class Shader {
 	private:
@@ -16,6 +18,15 @@ class Shader {
 			glDeleteShader(vs);
 			glDeleteShader(fs);
 			m_id = program;
+		}
+
+		static Shader* fromFile(const char* vertexFile, const char* fragmentFile) {
+			const char* vertexShader = readFile(vertexFile);
+			const char* fragmentShader = readFile(fragmentFile);
+			Shader* shader = new Shader(vertexShader, fragmentShader);
+			delete[] vertexShader;
+			delete[] fragmentShader;
+			return shader;
 		}
 
 		unsigned int getId() { return m_id; }

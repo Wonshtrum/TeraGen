@@ -13,6 +13,15 @@ Shader::Shader(const char* vertexShader, const char* fragmentShader) {
 	m_id = program;
 }
 
+Shader* Shader::fromFile(const char* vertexFile, const char* fragmentFile) {
+	const char* vertexShader = readFile(vertexFile);
+	const char* fragmentShader = readFile(fragmentFile);
+	Shader* shader = new Shader(vertexShader, fragmentShader);
+	delete[] vertexShader;
+	delete[] fragmentShader;
+	return shader;
+}
+
 unsigned int Shader::getId() { return m_id; }
 
 void Shader::bind() {
