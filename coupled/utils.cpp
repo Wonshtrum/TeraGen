@@ -11,6 +11,7 @@ const char* readFile(const char* name) {
 		content = new char[size];
 		file.seekg(0, std::ios::beg);
 		file.read(content, size);
+		content[size] = '\0';
 		file.close();
 		return content;
 	}

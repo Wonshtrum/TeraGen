@@ -6,8 +6,9 @@
 
 class Mesh {
 	private:
-		unsigned int m_abo = 0;
-		unsigned int m_ibo = 0;
+		unsigned int m_vao;
+		unsigned int m_abo;
+		unsigned int m_ibo;
 		unsigned int m_nVertices;
 		unsigned int m_nIndices;
 
