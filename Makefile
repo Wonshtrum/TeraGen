@@ -9,7 +9,7 @@ bindir = bin/
 docdir = doc/
 savedir = save/
 SRCPY := $(wildcard $(srcpy)*.cpp) $(wildcard $(srcpy)*/*.cpp)
-SRC := $(wildcard $(srcdir)*.cpp) $(wildcard $(srcdir)*/*.cpp)
+SRC := $(wildcard $(srcdir)*.cpp) $(wildcard $(srcdir)*/*.cpp) $(subst $(srcpy), $(srcdir), $(SRCPY))
 HEAD := $(wildcard $(srcdir)*.h) $(wildcard $(srcdir)*/*.h)
 OBJ := $(subst $(srcdir), $(bindir), $(SRC:.cpp=.o))
 PROG = Prog
@@ -24,8 +24,10 @@ $(bindir)%.o : $(srcdir)%.cpp
 	$(GOO) $^ -o $@
 
 $(srcdir)%.cpp : $(srcpy)%.cpp
+	mkdir -p $(dir $@)
 	$(GPY) $^
 $(srcdir)%.h : $(srcpy)%.cpp
+	mkdir -p $(dir $@)
 	$(GPY) $^
 
 .PHONY : clean

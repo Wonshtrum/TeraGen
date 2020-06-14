@@ -48,7 +48,7 @@ def extract(program):
 	nameSpace = ""
 	tabs = 0
 	for line in lines:
-		if beginWith(line, "#include"):
+		if beginWith(line, "#include", "#define", "typedef"):
 			header += line
 		elif beginWith(line, "class"):
 			header += line

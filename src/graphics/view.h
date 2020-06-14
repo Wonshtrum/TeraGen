@@ -5,9 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-static void error_callback(int error, const char* description) ;
+void error_callback(int error, const char* description) ;
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) ;
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) ;
 
 class View {
 	private:

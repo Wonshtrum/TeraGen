@@ -1,6 +1,7 @@
 #include "graphics/view.h"
 #include "graphics/shader.h"
 #include "graphics/mesh.h"
+#include "terrain/chunk.h"
 
 int main(void) {
 		View view(640, 480, "Simple example");
@@ -15,6 +16,7 @@ int main(void) {
 		};
 
 		Mesh mesh(vertices, 8, indices, 6);
+		Chunk chunk = Chunk();
 
 		Shader* shader = Shader::fromFile("src/assets/shaders/debug.vs", "src/assets/shaders/debug.fs");
 		shader->bind();
@@ -23,6 +25,7 @@ int main(void) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		while (view.render()) {
 			view.clear();
+			chunk.draw();
 			mesh.draw();
 		}
 		exit(EXIT_SUCCESS);
