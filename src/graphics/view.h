@@ -5,9 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-void error_callback(int error, const char* description) ;
+void error_callback(int error, const char* description);
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) ;
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 class View {
 	private:
@@ -17,11 +17,11 @@ class View {
 	public:
 		View(int width, int height, const char* title);
 
-		~View() ;
+		~View();
 
-		void clear() ;
+		void clear();
 
-		bool render() ;
+		bool render();
 };
 
 

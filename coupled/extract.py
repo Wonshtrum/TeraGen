@@ -50,7 +50,7 @@ def extract(program):
 	for line in lines:
 		if beginWith(line, "#include", "#define", "typedef"):
 			header += line
-		elif beginWith(line, "class"):
+		elif beginWith(line, "class", "struct", "enum"):
 			header += line
 			nameSpace = line.split(" ")[1]
 		elif (state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n":
@@ -60,11 +60,29 @@ def extract(program):
 				header += "\n"
 		elif (state == 0 or (state == 1 and nameSpace)) and "{" in line:
 			tabs = findTabs(line)
-			proto, _, impl = line.partition("{")
-			protoClean, _, init = proto.partition(":")
+			if ") {" in line:
+				proto, _, impl = line.partition(" {")
+			else:
+				proto, _, impl = line.partition(" = {")
+			protoClean, _, init = proto.replace("::", "##").partition(":")
+			protoClean = protoClean.replace("##", "::")
 			header += protoClean+";\n"
+			if "=" in protoClean:
+				protoClean = protoClean.replace("\t", "")
+				frags = protoClean.split(" = ")
+				protoCleanNoDefault = frags[0]
+				for frag in frags[1:]:
+					if "," in frag:
+						var, _, end = frag.partition(",")
+					else:
+						var, _, end = frag.partition(")")
+					protoCleanNoDefault += _+end
+				line = line.replace(protoClean, protoCleanNoDefault, 1)
 			if nameSpace:
-				pre, _, args = line.partition("(")
+				if "[" in line:
+					pre, _, args = line.partition("[")
+				else:
+					pre, _, args = line.partition("(")
 				fun = pre.replace("\t", "").split(" ")[-1]
 				line = line.replace(fun, nameSpace+"::"+fun, 1)
 			core += correctTabs(line.replace("static ", "", 1), tabs)

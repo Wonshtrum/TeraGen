@@ -1,4 +1,5 @@
 #include "../graphics/mesh.h"
+#include "../graphics/layout.h"
 
 #define CHUNK_SIZE 16
 typedef unsigned char Block;
@@ -12,6 +13,8 @@ class Chunk {
 		Chunk() {
 			float* vertices = new float[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*2];
 			unsigned int* indices = new unsigned int[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*6];
+			LayoutElement elements[] = {{Float2}};
+			Layout layout(elements, 1);
 			unsigned int i = 0;
 			unsigned int j = 0;
 			for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
@@ -30,7 +33,7 @@ class Chunk {
 					j++;
 				}
 			}
-			m_mesh = Mesh(vertices, 2*j, indices, 6*i);
+			m_mesh = Mesh(vertices, j, indices, 6*i, layout);
 		}
 
 		void draw() {

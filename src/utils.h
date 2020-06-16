@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-const char* readFile(const char* name) ;
+const char* readFile(const char* name);
 
 
 #endif

@@ -10,15 +10,15 @@ class Shader {
 	private:
 		unsigned int m_id;
 	public:
-		Shader(const char* vertexShader, const char* fragmentShader) ;
+		Shader(const char* vertexShader, const char* fragmentShader);
 
-		static Shader* fromFile(const char* vertexFile, const char* fragmentFile) ;
+		static Shader* fromFile(const char* vertexFile, const char* fragmentFile);
 
-		unsigned int getId() ;
+		unsigned int getId();
 
-		void bind() ;
+		void bind();
 
-		static unsigned int compile(unsigned int type, const char* source) ;
+		static unsigned int compile(unsigned int type, const char* source);
 };
 
 

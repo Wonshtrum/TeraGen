@@ -1,16 +1,15 @@
 #include "mesh.h"
 
 
-Mesh::Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsigned int nIndices): m_nVertices(nVertices), m_nIndices(nIndices), m_vertices(vertices) {
+Mesh::Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsigned int nIndices, Layout& layout): m_nVertices(nVertices), m_nIndices(nIndices), m_vertices(vertices), m_layout(&layout) {
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
 	glGenBuffers(1, &m_abo);
 	glBindBuffer(GL_ARRAY_BUFFER, m_abo);
-	glBufferData(GL_ARRAY_BUFFER, nVertices*sizeof(float), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, nVertices*layout.getStride(), vertices, GL_STATIC_DRAW);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (const void*)0);
+	layout.bind();
 
 	glGenBuffers(1, &m_ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
@@ -23,7 +22,7 @@ float* Mesh::getVertices() { return m_vertices; }
 
 void Mesh::update() {
 	glBindBuffer(GL_ARRAY_BUFFER, m_abo);
-	glBufferData(GL_ARRAY_BUFFER, m_nVertices*sizeof(float), m_vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_nVertices*m_layout->getStride(), m_vertices, GL_STATIC_DRAW);
 }
 
 void Mesh::bind() {

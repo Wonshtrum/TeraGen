@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <iostream>
+#include "layout.h"
 
 class Mesh {
 	private:
@@ -12,19 +13,20 @@ class Mesh {
 		unsigned int m_nVertices;
 		unsigned int m_nIndices;
 		float* m_vertices;
+		Layout* m_layout;
 
 	public:
-		Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsigned int nIndices);
+		Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsigned int nIndices, Layout& layout);
 
 		Mesh();
 
-		float* getVertices() ;
+		float* getVertices();
 
-		void update() ;
+		void update();
 
-		void bind() ;
+		void bind();
 
-		void draw() ;
+		void draw();
 };
 
 

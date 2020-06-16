@@ -2,6 +2,7 @@
 #define __CHUNK_H__
 
 #include "../graphics/mesh.h"
+#include "../graphics/layout.h"
 
 #define CHUNK_SIZE 16
 typedef unsigned char Block;
@@ -12,9 +13,9 @@ class Chunk {
 		Mesh m_mesh;
 
 	public:
-		Chunk() ;
+		Chunk();
 
-		void draw() ;
+		void draw();
 };
 
 
