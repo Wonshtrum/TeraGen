@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
-#include "../utils.h"
+#include "utils/file.h"
 
 class Shader {
 	private:

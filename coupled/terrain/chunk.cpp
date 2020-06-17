@@ -1,12 +1,13 @@
-#include "../graphics/mesh.h"
-#include "../graphics/layout.h"
+#include "graphics/mesh.h"
+#include "graphics/layout.h"
+#include "utils/noise.h"
 
-#define CHUNK_SIZE 16
+#define CHUNK_SIZE 64
 typedef unsigned char Block;
 
 class Chunk {
 	private:
-		Block m_grid[CHUNK_SIZE*CHUNK_SIZE];
+		Block* m_grid;
 		Mesh m_mesh;
 	
 	public:
@@ -17,6 +18,8 @@ class Chunk {
 			Layout layout(elements, 1);
 			unsigned int i = 0;
 			unsigned int j = 0;
+			double dx, dy;
+			double f = 16.0;
 			for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
 				for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
 					if (x < CHUNK_SIZE && y < CHUNK_SIZE) {
@@ -27,8 +30,10 @@ class Chunk {
 						indices[6*i+4] = i+CHUNK_SIZE+2;
 						indices[6*i+5] = i+CHUNK_SIZE+1;
 					}
-					vertices[2*j+0] = x;
-					vertices[2*j+1] = y;
+					dx = PerlinNoise::noise2D((f*x)/CHUNK_SIZE, (f*y)/CHUNK_SIZE);
+					dy = PerlinNoise::noise2D((f*x)/CHUNK_SIZE+128, (f*y)/CHUNK_SIZE);
+					vertices[2*j+0] = x+dx*16.0/f;
+					vertices[2*j+1] = y+dy*16.0/f;
 					i++;
 					j++;
 				}

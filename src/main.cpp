@@ -3,6 +3,7 @@
 #include "graphics/mesh.h"
 #include "graphics/layout.h"
 #include "terrain/chunk.h"
+#include "utils/noise.h"
 
 int main(void) {
 		View view(640, 480, "Simple example");
