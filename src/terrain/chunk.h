@@ -11,10 +11,12 @@ typedef unsigned char Block;
 class Chunk {
 	private:
 		Block* m_grid;
-		Mesh m_mesh;
+		Mesh* m_mesh;
 
 	public:
 		Chunk();
+
+		~Chunk();
 
 		void draw();
 };

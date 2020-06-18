@@ -1,43 +1,60 @@
 #include "graphics/view.h"
 #include "graphics/shader.h"
 #include "graphics/mesh.h"
-#include "graphics/layout.h"
 #include "graphics/texture.h"
 #include "terrain/chunk.h"
 #include "utils/noise.h"
 
 int main(void) {
-	Texture texture("src/assets/img/img.png");
-	texture.print();
+	{
+		View view(640, 480, "Simple example");
+		
+		Texture* blank = Texture::createBlank(3);
+		blank->print();
 
-	View view(640, 480, "Simple example");
-	float vertices[] = {
-		-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-		-1.0f,  1.0f, 1.0f, 1.0f, 0.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 2, 2, 3, 0
-	};
+		Texture texture("src/assets/img/img.png");
+		texture.print();
+		texture.bind();
 
-	LayoutElement elements[] = {{Float2}, {Float3}};
-	Layout layout(elements, 2);
+		float* vertices1 = new float[5*4] {
+			-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f,  1.0f, 1.0f, 1.0f, 0.0f
+		};
+		unsigned int* indices1 = new unsigned int[6] {
+			0, 1, 2, 2, 3, 0
+		};
+		float* vertices2 = new float[7*4] {
+			-1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+			 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+			 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+			-1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f
+		};
+		unsigned int* indices2 = new unsigned int[6] {
+			0, 1, 2, 2, 3, 0
+		};
 
-	Mesh mesh(vertices, 4, indices, 6, layout);
-	Chunk chunk = Chunk();
+		Mesh mesh1(vertices1, 4, indices1, 6, {{Float2}, {Float3}});
+		Mesh mesh2(vertices2, 4, indices2, 6, {{Float2}, {Float2}, {Float3}});
+		Chunk chunk = Chunk();
 
-	Shader* shaderDebug = Shader::fromFile("src/assets/shaders/debug.vs", "src/assets/shaders/basic.fs");
-	Shader* shaderBasic = Shader::fromFile("src/assets/shaders/basic.vs", "src/assets/shaders/basic.fs");
+		Shader* shaderDebug = Shader::fromFile("src/assets/shaders/debug.vs", "src/assets/shaders/basic.fs");
+		Shader* shaderBasic = Shader::fromFile("src/assets/shaders/basic.vs", "src/assets/shaders/basic.fs");
+		Shader* shaderTexture = Shader::fromFile("src/assets/shaders/basicTex.vs", "src/assets/shaders/basicTex.fs");
 
-	mesh.bind();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	while (view.render()) {
-		view.clear();
-		shaderBasic->bind();
-		mesh.draw();
-		shaderDebug->bind();
-		chunk.draw();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		while (view.render()) {
+			view.clear();
+			shaderBasic->bind();
+			mesh1.draw();
+			shaderDebug->bind();
+			chunk.draw();
+			shaderTexture->bind();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			mesh2.draw();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
 	}
 	exit(EXIT_SUCCESS);
 }

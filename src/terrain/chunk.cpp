@@ -2,10 +2,9 @@
 
 
 Chunk::Chunk() {
+	m_grid = new Block[CHUNK_SIZE*CHUNK_SIZE];
 	float* vertices = new float[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*2];
 	unsigned int* indices = new unsigned int[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*6];
-	LayoutElement elements[] = {{Float2}};
-	Layout layout(elements, 1);
 	unsigned int i = 0;
 	unsigned int j = 0;
 	double dx, dy;
@@ -28,9 +27,14 @@ Chunk::Chunk() {
 			j++;
 		}
 	}
-	m_mesh = Mesh(vertices, j, indices, 6*i, layout);
+	m_mesh = new Mesh(vertices, j, indices, 6*i, {{Float2}});
+}
+
+Chunk::~Chunk() {
+	delete[] m_grid;
+	delete m_mesh;
 }
 
 void Chunk::draw() {
-	m_mesh.draw();
+	m_mesh->draw();
 }

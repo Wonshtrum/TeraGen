@@ -12,6 +12,8 @@ class Shader {
 	public:
 		Shader(const char* vertexShader, const char* fragmentShader);
 
+		~Shader();
+
 		static Shader* fromFile(const char* vertexFile, const char* fragmentFile);
 
 		unsigned int getId();

@@ -13,6 +13,8 @@ Shader::Shader(const char* vertexShader, const char* fragmentShader) {
 	m_id = program;
 }
 
+Shader::~Shader() { glDeleteProgram(m_id); }
+
 Shader* Shader::fromFile(const char* vertexFile, const char* fragmentFile) {
 	const char* vertexShader = readFile(vertexFile);
 	const char* fragmentShader = readFile(fragmentFile);
@@ -24,9 +26,7 @@ Shader* Shader::fromFile(const char* vertexFile, const char* fragmentFile) {
 
 unsigned int Shader::getId() { return m_id; }
 
-void Shader::bind() {
-	glUseProgram(m_id);
-}
+void Shader::bind() { glUseProgram(m_id); }
 
 unsigned int Shader::compile(unsigned int type, const char* source) {
 	unsigned int shader = glCreateShader(type);

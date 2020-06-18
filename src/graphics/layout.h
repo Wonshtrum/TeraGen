@@ -2,6 +2,7 @@
 #define __LAYOUT_H__
 
 #include <GL/glew.h>
+#include <initializer_list>
 
 enum LayoutDataType {
 	Float,
@@ -30,6 +31,8 @@ struct LayoutElement {
 	static GLenum s_GLTypes[LayoutDataType::nbTypes];
 
 	LayoutElement(LayoutDataType type, bool normalized = false);
+
+	LayoutElement();
 };
 
 class Layout {
@@ -39,7 +42,15 @@ class Layout {
 		unsigned int m_stride;
 
 	public:
+		Layout();
+
+		Layout(std::initializer_list<LayoutElement> elements);
+
 		Layout(LayoutElement* elements, unsigned int count);
+
+		Layout(const Layout& other);
+
+		~Layout();
 
 		unsigned int getStride();
 

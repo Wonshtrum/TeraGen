@@ -53,7 +53,7 @@ def extract(program):
 		elif beginWith(line, "class", "struct", "enum"):
 			header += line
 			nameSpace = line.split(" ")[1]
-		elif (state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n":
+		elif beginWith(line, "//", "/*", "template") or ((state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n"):
 			if len(core) < 2 or core[-2] != "\n":
 				core += "\n"
 			if len(header) < 2 or header[-2] != "\n":
@@ -79,13 +79,17 @@ def extract(program):
 					protoCleanNoDefault += _+end
 				line = line.replace(protoClean, protoCleanNoDefault, 1)
 			if nameSpace:
-				if "[" in line:
+				if "[" in line and not ") {" in line:
 					pre, _, args = line.partition("[")
 				else:
 					pre, _, args = line.partition("(")
 				fun = pre.replace("\t", "").split(" ")[-1]
 				line = line.replace(fun, nameSpace+"::"+fun, 1)
-			core += correctTabs(line.replace("static ", "", 1), tabs)
+				if "noise2D" in line:
+					print(line)
+			if beginWith(line, "static "):		
+				line = line.replace("static ", "", 1)
+			core += correctTabs(line, tabs)
 		elif state == 1 and nameSpace:
 			header += line
 		elif nameSpace == "" or state >= 2:

@@ -11,12 +11,34 @@ LayoutElement::LayoutElement(LayoutDataType type, bool normalized): m_normalized
 	m_size = s_sizes[type];
 }
 
+LayoutElement::LayoutElement() {}
+
+Layout::Layout() {}
+
+Layout::Layout(std::initializer_list<LayoutElement> elements): m_count(elements.size()), m_stride(0) {
+	m_elements = new LayoutElement[m_count];
+	for (unsigned int i = 0 ; i < m_count ; i++) {
+		m_elements[i] = elements.begin()[i];
+		m_elements[i].m_offset = m_stride;
+		m_stride += m_elements[i].m_size;
+	}
+}
+
 Layout::Layout(LayoutElement* elements, unsigned int count): m_elements(elements), m_count(count), m_stride(0) {
 	for (unsigned int i = 0 ; i < m_count ; i++) {
 		m_elements[i].m_offset = m_stride;
 		m_stride += m_elements[i].m_size;
 	}
 }
+
+Layout::Layout(const Layout& other): m_count(other.m_count), m_stride(other.m_stride) {
+	m_elements = new LayoutElement[m_count];
+	for (unsigned int i = 0 ; i < m_count ; i++) {
+		m_elements[i] = other.m_elements[i];
+	}
+}
+
+Layout::~Layout() { delete[] m_elements; }
 
 unsigned int Layout::getStride() { return m_stride; }
 

@@ -10,7 +10,7 @@ const char* readFile(const char* name) {
 	if (file.is_open()) {
 		file.seekg(0, std::ios::end);
 		size = file.tellg();
-		content = new char[size];
+		content = new char[size+1];
 		file.seekg(0, std::ios::beg);
 		file.read(content, size);
 		content[size] = '\0';

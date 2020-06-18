@@ -12,13 +12,16 @@ class Mesh {
 		unsigned int m_ibo;
 		unsigned int m_nVertices;
 		unsigned int m_nIndices;
+		unsigned int* m_indices;
 		float* m_vertices;
-		Layout* m_layout;
+		Layout m_layout;
 
 	public:
-		Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsigned int nIndices, Layout& layout);
+		Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsigned int nIndices, Layout layout);
 
 		Mesh();
+
+		~Mesh();
 
 		float* getVertices();
 

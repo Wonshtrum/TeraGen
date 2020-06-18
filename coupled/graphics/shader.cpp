@@ -20,6 +20,8 @@ class Shader {
 			m_id = program;
 		}
 
+		~Shader() { glDeleteProgram(m_id); }
+
 		static Shader* fromFile(const char* vertexFile, const char* fragmentFile) {
 			const char* vertexShader = readFile(vertexFile);
 			const char* fragmentShader = readFile(fragmentFile);
@@ -31,9 +33,7 @@ class Shader {
 
 		unsigned int getId() { return m_id; }
 
-		void bind() {
-			glUseProgram(m_id);
-		}
+		void bind() { glUseProgram(m_id); }
 
 		static unsigned int compile(unsigned int type, const char* source) {
 			unsigned int shader = glCreateShader(type);
