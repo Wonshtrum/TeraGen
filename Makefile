@@ -1,4 +1,4 @@
-LIBS = -lGL -lGLU -lglfw3 -lGLEW -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor
+LIBS = -lGL -lGLU -lglfw3 -lGLEW -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor -lz
 GPP = g++ -std=c++11 -Wall -I $(srcdir)
 GOO = $(GPP) -c
 GPY = coupled/extract.py
