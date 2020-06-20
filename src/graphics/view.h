@@ -11,14 +11,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 class View {
 	private:
+		static bool s_GLFWInitialized;
 		int m_width;
 		int m_height;
 		GLFWwindow* m_window;
+		static void s_GLFWInit();
 
 	public:
 		View(int width, int height, const char* title);
 
 		~View();
+
+		void bind();
 
 		void clear();
 

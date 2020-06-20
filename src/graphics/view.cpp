@@ -9,26 +9,34 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-View::View(int width, int height, const char* title): m_width(width), m_height(height) {
-	glfwSetErrorCallback(error_callback);
+bool View::s_GLFWInitialized = false;
+void View::s_GLFWInit() {
+	if (s_GLFWInitialized) return;
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
+	glfwSetErrorCallback(error_callback);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	s_GLFWInitialized = true;
+}
+
+View::View(int width, int height, const char* title): m_width(width), m_height(height) {
+	s_GLFWInit();
 
 	m_window = glfwCreateWindow(m_width, m_height, title, NULL, NULL);
 	if (!m_window) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-	glfwMakeContextCurrent(m_window);
-	glfwSetKeyCallback(m_window, key_callback);
+
+	bind();
+	glfwSwapInterval(1);
 
 	if (glewInit()!=GLEW_OK)
 		exit(EXIT_FAILURE);
 
-	glfwSwapInterval(1);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
@@ -38,6 +46,11 @@ View::View(int width, int height, const char* title): m_width(width), m_height(h
 View::~View() {
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
+}
+
+void View::bind() {
+	glfwMakeContextCurrent(m_window);
+	glfwSetKeyCallback(m_window, key_callback);
 }
 
 void View::clear() {

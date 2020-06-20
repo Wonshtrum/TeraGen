@@ -8,7 +8,7 @@
 int main(void) {
 	{
 		View view(640, 480, "Simple example");
-		
+
 		Texture* blank = Texture::createBlank(3);
 		blank->print();
 
@@ -36,6 +36,7 @@ int main(void) {
 		};
 
 		Mesh mesh1(vertices1, 4, indices1, 6, {{Float2}, {Float3}});
+		view.bind();
 		Mesh mesh2(vertices2, 4, indices2, 6, {{Float2}, {Float2}, {Float3}});
 		Chunk chunk = Chunk();
 
