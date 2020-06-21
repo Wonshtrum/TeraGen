@@ -53,7 +53,7 @@ def extract(program):
 		if template and not startTemplate and state == template-1:
 			print(state)
 			template = 0
-		if template or beginWith(line, "#include", "#define", "typedef"):
+		if template or beginWith(line, "#include", "#define", "typedef", "using"):
 			header += line
 			startTemplate = False
 		elif beginWith(line, "class", "struct", "enum"):
@@ -69,7 +69,7 @@ def extract(program):
 				core += "\n"
 			if len(header) < 2 or header[-2] != "\n":
 				header += "\n"
-		elif (state == 0 or (state == 1 and nameSpace)) and ("{" in line or beginWith(line, "static ")):
+		elif (state == 0 or (state == 1 and nameSpace)) and (("{" in line and "[](" not in line) or beginWith(line, "static ")):
 			tabs = findTabs(line)
 			if ") {" in line:
 				proto, _, impl = line.partition(" {")

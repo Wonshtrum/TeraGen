@@ -1,22 +1,30 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <functional>
+#include "events/events.h"
+
+#define BIND(x) std::bind(&x, std::placeholders::_1)
 
 void error_callback(int error, const char* description) {
-	fputs(description, stderr);
+	std::cerr << description << std::endl;
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-}
+void setWindowEventsCallback(GLFWwindow* window);
+
+using EventCallback = std::function<void(Event&)>;
+struct GLFWHook {
+	EventCallback callback = [](Event& e) {};
+};
 
 class View {
 	private:
 		static bool s_GLFWInitialized = false;
-		int m_width;
-		int m_height;
+		int width;
+		int m_height;		
 		GLFWwindow* m_window;
+		GLFWHook m_hook;
+
 		static void s_GLFWInit() {
 			if (s_GLFWInitialized) return;
 			if (!glfwInit())
@@ -30,10 +38,10 @@ class View {
 		}
 
 	public:
-		View(int width, int height, const char* title): m_width(width), m_height(height) {
+		View(int width, int height, const char* title): width(width), m_height(height) {
 			s_GLFWInit();
 
-			m_window = glfwCreateWindow(m_width, m_height, title, NULL, NULL);
+			m_window = glfwCreateWindow(width, m_height, title, NULL, NULL);
 			if (!m_window) {
 				glfwTerminate();
 				exit(EXIT_FAILURE);
@@ -49,6 +57,10 @@ class View {
 			glDisable(GL_BLEND);
 			glDisable(GL_DEPTH_TEST);
 			glClearColor(0.0, 1.0, 0.0, 1.0);
+			glViewport(0, 0, width, m_height);
+
+			glfwSetWindowUserPointer(m_window, &m_hook);
+			setWindowEventsCallback(m_window);
 		}
 
 		~View() {
@@ -56,14 +68,13 @@ class View {
 			glfwTerminate();
 		}
 
+		void setCallback(EventCallback callback) { m_hook.callback = callback; }
+
 		void bind() {
 			glfwMakeContextCurrent(m_window);
-			glfwSetKeyCallback(m_window, key_callback);
 		}
 
 		void clear() {
-			glfwGetFramebufferSize(m_window, &m_width, &m_height);
-			glViewport(0, 0, m_width, m_height);
 			glClear(GL_COLOR_BUFFER_BIT);
 		}
 

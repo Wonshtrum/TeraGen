@@ -16,8 +16,11 @@ EventType WindowFocusEvent::getStaticType() { return WindowFocus; }
 EventType WindowLoseFocusEvent::getType() { return WindowLoseFocus; }
 EventType WindowLoseFocusEvent::getStaticType() { return WindowLoseFocus; }
 
+WindowMoveEvent::WindowMoveEvent(int x, int y): m_x(x), m_y(y) {}
 EventType WindowMoveEvent::getType() { return WindowMove; }
 EventType WindowMoveEvent::getStaticType() { return WindowMove; }
+int WindowMoveEvent::getX() { return m_x; }
+int WindowMoveEvent::getY() { return m_y; }
 
 KeyEvent::KeyEvent(int keyCode): m_keyCode(keyCode) {}
 int KeyEvent::getKeyCode() { return m_keyCode; }

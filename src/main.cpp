@@ -5,10 +5,15 @@
 #include "terrain/chunk.h"
 #include "utils/noise.h"
 
+void cb(Event& event) {
+	std::cout << event.getType() << std::endl;
+}
+
 int main(void) {
 	{
 		View view(640, 480, "Simple example");
-
+		view.setCallback(BIND(cb));
+		
 		Texture* blank = Texture::createBlank(3);
 		blank->print();
 

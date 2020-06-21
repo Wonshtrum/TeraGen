@@ -1,15 +1,14 @@
 #include "view.h"
 
+
 void error_callback(int error, const char* description) {
-	fputs(description, stderr);
+	std::cerr << description << std::endl;
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-}
+void setWindowEventsCallback(GLFWwindow* window);
 
 bool View::s_GLFWInitialized = false;
+
 void View::s_GLFWInit() {
 	if (s_GLFWInitialized) return;
 	if (!glfwInit())
@@ -22,10 +21,10 @@ void View::s_GLFWInit() {
 	s_GLFWInitialized = true;
 }
 
-View::View(int width, int height, const char* title): m_width(width), m_height(height) {
+View::View(int width, int height, const char* title): width(width), m_height(height) {
 	s_GLFWInit();
 
-	m_window = glfwCreateWindow(m_width, m_height, title, NULL, NULL);
+	m_window = glfwCreateWindow(width, m_height, title, NULL, NULL);
 	if (!m_window) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -41,6 +40,10 @@ View::View(int width, int height, const char* title): m_width(width), m_height(h
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glClearColor(0.0, 1.0, 0.0, 1.0);
+	glViewport(0, 0, width, m_height);
+
+	glfwSetWindowUserPointer(m_window, &m_hook);
+	setWindowEventsCallback(m_window);
 }
 
 View::~View() {
@@ -48,14 +51,13 @@ View::~View() {
 	glfwTerminate();
 }
 
+void View::setCallback(EventCallback callback) { m_hook.callback = callback; }
+
 void View::bind() {
 	glfwMakeContextCurrent(m_window);
-	glfwSetKeyCallback(m_window, key_callback);
 }
 
 void View::clear() {
-	glfwGetFramebufferSize(m_window, &m_width, &m_height);
-	glViewport(0, 0, m_width, m_height);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

@@ -44,9 +44,15 @@ class WindowLoseFocusEvent: public Event {
 };
 
 class WindowMoveEvent: public Event {
+	private:
+		int m_x;
+		int m_y;
 	public:
+		WindowMoveEvent(int x, int y): m_x(x), m_y(y) {}
 		virtual EventType getType() override { return WindowMove; }
 		static EventType getStaticType() { return WindowMove; }
+		int getX() { return m_x; }
+		int getY() { return m_y; }
 };
 
 class KeyEvent: public Event {
