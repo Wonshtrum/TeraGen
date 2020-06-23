@@ -3,7 +3,8 @@
 
 Chunk::Chunk() {
 	m_grid = new Block[CHUNK_SIZE*CHUNK_SIZE];
-	float* vertices = new float[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*2];
+	int stride = 4;
+	float* vertices = new float[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*stride];
 	unsigned int* indices = new unsigned int[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)*6];
 	unsigned int i = 0;
 	unsigned int j = 0;
@@ -21,19 +22,23 @@ Chunk::Chunk() {
 			}
 			dx = PerlinNoise::noise2D((f*x)/CHUNK_SIZE, (f*y)/CHUNK_SIZE);
 			dy = PerlinNoise::noise2D((f*x)/CHUNK_SIZE+128, (f*y)/CHUNK_SIZE);
-			vertices[2*j+0] = x+dx*16.0/f;
-			vertices[2*j+1] = y+dy*16.0/f;
+			vertices[stride*j+0] = (x+dx*16.0/f)/CHUNK_SIZE;
+			vertices[stride*j+1] = (y+dy*16.0/f)/CHUNK_SIZE;
+			vertices[stride*j+2] = x*1.0/CHUNK_SIZE;
+			vertices[stride*j+3] = y*1.0/CHUNK_SIZE;
 			i++;
 			j++;
 		}
 	}
-	m_mesh = new Mesh(vertices, j, indices, 6*i, {{Float2}});
+	m_mesh = new Mesh(vertices, j, indices, 6*i, {{Float2}, {Float2}});
 }
 
 Chunk::~Chunk() {
 	delete[] m_grid;
 	delete m_mesh;
 }
+
+Mesh* Chunk::getMesh() { return m_mesh; }
 
 void Chunk::draw() {
 	m_mesh->draw();

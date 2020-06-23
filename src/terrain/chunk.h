@@ -18,6 +18,8 @@ class Chunk {
 
 		~Chunk();
 
+		Mesh* getMesh();
+
 		void draw();
 };
 
