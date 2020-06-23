@@ -55,7 +55,9 @@ class View {
 
 			std::cout << glGetString(GL_VERSION) << std::endl;
 			glDisable(GL_BLEND);
-			glDisable(GL_DEPTH_TEST);
+			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
 			glClearColor(0.0, 1.0, 0.0, 1.0);
 			glViewport(0, 0, width, m_height);
 
@@ -75,7 +77,7 @@ class View {
 		}
 
 		void clear() {
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
 		bool render() {

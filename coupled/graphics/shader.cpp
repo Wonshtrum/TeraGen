@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include "utils/file.h"
+#include "math/matrix.h"
+#include "math/vector.h"
 
 class Shader {
 	private:
@@ -31,10 +33,6 @@ class Shader {
 			return shader;
 		}
 
-		unsigned int getId() { return m_id; }
-
-		void bind() { glUseProgram(m_id); }
-
 		static unsigned int compile(unsigned int type, const char* source) {
 			unsigned int shader = glCreateShader(type);
 			glShaderSource(shader, 1, &source, nullptr);
@@ -52,5 +50,14 @@ class Shader {
 				return 0;
 			}
 			return shader;
+		}
+
+		unsigned int getId() { return m_id; }
+
+		void bind() { glUseProgram(m_id); }
+
+		void uploadUniform(const char* name, Matrix4& mat4) {
+			unsigned int location = glGetUniformLocation(m_id, name);
+			glUniformMatrix4fv(location, 1, GL_FALSE, mat4.m);
 		}
 };

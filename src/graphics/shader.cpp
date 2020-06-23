@@ -24,10 +24,6 @@ Shader* Shader::fromFile(const char* vertexFile, const char* fragmentFile) {
 	return shader;
 }
 
-unsigned int Shader::getId() { return m_id; }
-
-void Shader::bind() { glUseProgram(m_id); }
-
 unsigned int Shader::compile(unsigned int type, const char* source) {
 	unsigned int shader = glCreateShader(type);
 	glShaderSource(shader, 1, &source, nullptr);
@@ -45,4 +41,13 @@ unsigned int Shader::compile(unsigned int type, const char* source) {
 		return 0;
 	}
 	return shader;
+}
+
+unsigned int Shader::getId() { return m_id; }
+
+void Shader::bind() { glUseProgram(m_id); }
+
+void Shader::uploadUniform(const char* name, Matrix4& mat4) {
+	unsigned int location = glGetUniformLocation(m_id, name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, mat4.m);
 }

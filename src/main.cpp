@@ -2,9 +2,9 @@
 #include "graphics/shader.h"
 #include "graphics/mesh.h"
 #include "graphics/texture.h"
+#include "graphics/camera.h"
 #include "terrain/chunk.h"
 #include "utils/noise.h"
-#include "math/transform.h"
 
 void cb(Event& event) {
 	std::cout << event.getType() << std::endl;
@@ -12,12 +12,15 @@ void cb(Event& event) {
 
 int main(void) {
 	{
-		Transform t;
-		t.setTranslation(1,2,3);
-		t.setRotation(1,2,3);
-		t.setScale(0,1,1);
-		t.calculateTransformMatrix();
+		Camera camera(0.9, 640, 480, 0.1, 1000);
+		Transform& t = camera.getTransform();
+		t.setTranslation(-0.1,-0.5,1);
+		t.setRotation(0.5,0.5,0.5);
+		t.setScale(1,1,1);
+		t.calculate();
 		std::cout << t << std::endl;
+		camera.calculate();
+
 		View view(640, 480, "Simple example");
 		//view.setCallback(BIND(cb));
 		
@@ -28,64 +31,46 @@ int main(void) {
 		texture.print();
 		texture.bind();
 
-		float* vertices1 = new float[5*4] {
-			-1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-			 1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-			-1.0f,  1.0f, 1.0f, 1.0f, 0.0f
+		float* vertices = new float[8*4] {
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f
 		};
-		unsigned int* indices1 = new unsigned int[6] {
-			0, 1, 2, 2, 3, 0
-		};
-		float* vertices2 = new float[7*4] {
-			-1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			-1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
-		};
-		unsigned int* indices2 = new unsigned int[6] {
+		unsigned int* indices = new unsigned int[6] {
 			0, 1, 2, 2, 3, 0
 		};
 
-		Mesh mesh1(vertices1, 4, indices1, 6, {{Float2}, {Float3}});
-		view.bind();
-		Mesh mesh2(vertices2, 4, indices2, 6, {{Float2}, {Float2}, {Float3}});
+		Mesh mesh(vertices, 4, indices, 6, {{Float3}, {Float2}, {Float3}});
 		Chunk chunk = Chunk();
 		float* chunkMesh = chunk.getMesh()->getVertices();
 
-		Shader* shaderBasic = Shader::fromFile("src/assets/shaders/basic.vs", "src/assets/shaders/basic.fs");
 		Shader* shaderTexture = Shader::fromFile("src/assets/shaders/basicTex.vs", "src/assets/shaders/coloredTex.fs");
+		Shader* shaderColoredTexture = Shader::fromFile("src/assets/shaders/coloredTex.vs", "src/assets/shaders/coloredTex.fs");
 
-		double dx, dy;
-		double f = 8.0;
+		double z;
+		double f = 4.0;
 		double Dx = 0;
 		double Dy = 0;
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		while (view.render()) {
 			view.clear();
-			shaderBasic->bind();
-			mesh1.draw();
 			shaderTexture->bind();
+			shaderTexture->uploadUniform("u_transform", camera.getMatrix());
 			chunk.draw();
-			shaderTexture->bind();
-			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			mesh2.draw();
-			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			shaderColoredTexture->bind();
+			mesh.draw();
 
 			int i = 0;
 			for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
 				for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
-					dx = PerlinNoise::noise2D((f*x)/CHUNK_SIZE+Dx, (f*y)/CHUNK_SIZE+Dy);
-					dy = PerlinNoise::noise2D((f*x)/CHUNK_SIZE+128+Dx, (f*y)/CHUNK_SIZE+Dy);
-					chunkMesh[4*i+0] = 8*(x+dx*16.0/f)/CHUNK_SIZE;
-					chunkMesh[4*i+1] = 8*(y+dy*16.0/f)/CHUNK_SIZE;
-					chunkMesh[4*i+2] = x*1.0/CHUNK_SIZE;
-					chunkMesh[4*i+3] = y*1.0/CHUNK_SIZE;
+					z = PerlinNoise::noise2D((f*x)/CHUNK_SIZE+Dx, (f*y)/CHUNK_SIZE+Dy);
+					chunkMesh[5*i+2] = z*0.5;
 					i++;
 				}
 			}
-			Dx += 0.02;
-			Dy += 0.02;
+			Dx += 0.001;
+			Dy += 0.001;
 			chunk.getMesh()->update();
 		}
 	}

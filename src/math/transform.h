@@ -13,9 +13,10 @@ class Transform {
 	public:
 		Transform();
 
-		void calculateTransformMatrix();
+		void calculate();
 
-		Matrix4 getMatrix();
+		Matrix4& getMatrix();
+		float* getRawMatrix();
 
 		void setTranslation(float x, float y, float z);
 		void setTranslation(Vector3 translation);

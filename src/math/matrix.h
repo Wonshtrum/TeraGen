@@ -21,6 +21,8 @@ struct Matrix4 {
 	Matrix4& initScale(float x, float y, float z);
 	Matrix4& initScale(Vector3 scale);
 
+	Matrix4& initProjection(float fov, float width, float height, float zN, float zF);
+
 	Matrix4 operator*(Matrix4&& other);
 	Matrix4 operator*(Matrix4& other);
 

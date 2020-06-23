@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include "utils/file.h"
+#include "math/matrix.h"
+#include "math/vector.h"
 
 class Shader {
 	private:
@@ -16,11 +18,13 @@ class Shader {
 
 		static Shader* fromFile(const char* vertexFile, const char* fragmentFile);
 
+		static unsigned int compile(unsigned int type, const char* source);
+
 		unsigned int getId();
 
 		void bind();
 
-		static unsigned int compile(unsigned int type, const char* source);
+		void uploadUniform(const char* name, Matrix4& mat4);
 };
 
 
