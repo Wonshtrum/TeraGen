@@ -4,21 +4,35 @@
 #include "graphics/mesh.h"
 #include "graphics/layout.h"
 #include "utils/noise.h"
+#include "macros.h"
 
-#define CHUNK_SIZE 64
-typedef unsigned char Block;
+typedef uint8_t Block;
 
-class Chunk {
+class LightChunk {
 	private:
-		Block* m_grid;
 		Mesh* m_mesh;
 
 	public:
-		Chunk();
+		LightChunk();
 
-		~Chunk();
+		~LightChunk();
 
-		Mesh* getMesh();
+		void seedMesh(double dx, double dy);
+
+		void draw();
+};
+
+class DenseChunk {
+	private:
+		Mesh* m_mesh;
+		Block* m_grid;
+
+	public:
+		DenseChunk();
+
+		~DenseChunk();
+
+		void updateMesh();
 
 		void draw();
 };

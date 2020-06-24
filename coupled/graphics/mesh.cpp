@@ -36,6 +36,8 @@ class Mesh {
 			delete[] m_indices;
 		}
 
+		unsigned int getNVertices() { return m_nVertices; }
+		void setNVertices(unsigned int nVertices) { m_nVertices = nVertices; }
 		float* getVertices() { return m_vertices; }
 
 		void update() {

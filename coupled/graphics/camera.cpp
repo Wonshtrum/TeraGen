@@ -1,4 +1,6 @@
 #include "math/transform.h"
+#include "events/events.h"
+#include "macros.h"
 
 class Camera {
 	private:
@@ -17,7 +19,6 @@ class Camera {
 		}
 		
 		void calculate() {
-			std::cout << m_transform << std::endl;
 			m_projectedTransformMatrix = m_projectionMatrix*m_transform.getMatrix();
 		}
 
@@ -27,5 +28,30 @@ class Camera {
 
 		Transform& getTransform() {
 			return m_transform;
+		}
+
+		bool onKeyEvent(KeyPressEvent& event) {
+			std::cout << event.getKeyCode() << std::endl;
+			float speed = 0.01;
+			switch (event.getKeyCode()) {
+				case 263:
+					m_transform.getRotation().x += speed;
+					break;
+				case 262:
+					m_transform.getRotation().x -= speed;
+					break;
+				case 265:
+					m_transform.getRotation().y += speed;
+					break;
+				case 264:
+					m_transform.getRotation().y -= speed;
+					break;
+			}
+			m_transform.calculate();
+			calculate();
+			return false;
+		}
+		void onEvent(Event& event) {
+			dispatch<KeyPressEvent>(event, M_BIND(Camera::onKeyEvent));
 		}
 };

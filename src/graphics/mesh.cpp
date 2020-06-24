@@ -23,6 +23,8 @@ Mesh::~Mesh() {
 	delete[] m_indices;
 }
 
+unsigned int Mesh::getNVertices() { return m_nVertices; }
+void Mesh::setNVertices(unsigned int nVertices) { m_nVertices = nVertices; }
 float* Mesh::getVertices() { return m_vertices; }
 
 void Mesh::update() {

@@ -6,7 +6,6 @@ Camera::Camera(float fov, float width, float height, float zNear, float zFar): m
 }
 
 void Camera::calculate() {
-	std::cout << m_transform << std::endl;
 	m_projectedTransformMatrix = m_projectionMatrix*m_transform.getMatrix();
 }
 
@@ -16,4 +15,29 @@ Matrix4& Camera::getMatrix() {
 
 Transform& Camera::getTransform() {
 	return m_transform;
+}
+
+bool Camera::onKeyEvent(KeyPressEvent& event) {
+	std::cout << event.getKeyCode() << std::endl;
+	float speed = 0.01;
+	switch (event.getKeyCode()) {
+		case 263:
+			m_transform.getRotation().x += speed;
+			break;
+		case 262:
+			m_transform.getRotation().x -= speed;
+			break;
+		case 265:
+			m_transform.getRotation().y += speed;
+			break;
+		case 264:
+			m_transform.getRotation().y -= speed;
+			break;
+	}
+	m_transform.calculate();
+	calculate();
+	return false;
+}
+void Camera::onEvent(Event& event) {
+	dispatch<KeyPressEvent>(event, M_BIND(Camera::onKeyEvent));
 }

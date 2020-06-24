@@ -132,6 +132,7 @@ class MouseScrollEvent: public Event {
 template<typename T>
 bool dispatch(Event& event, std::function<bool(T&)> func) {
 	if (event.getType() == T::getStaticType()) {
+		event.m_handled = func(*(T*)&event);
 		return true;
 	}
 	return false;

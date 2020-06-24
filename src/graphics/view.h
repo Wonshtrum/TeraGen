@@ -7,8 +7,6 @@
 #include <functional>
 #include "events/events.h"
 
-#define BIND(x) std::bind(&x, std::placeholders::_1)
-
 void error_callback(int error, const char* description);
 
 using EventCallback = std::function<void(Event&)>;

@@ -29,6 +29,10 @@ class Transform {
 			return m_transformMatrix.m;
 		}
 
+		Vector3& getTranslation() { return m_translation; }
+		Vector3& getRotation() { return m_rotation; }
+		Vector3& getScale() { return m_scale; }
+
 		void setTranslation(float x, float y, float z) {
 			m_translation = Vector3(x, y, z);
 		}

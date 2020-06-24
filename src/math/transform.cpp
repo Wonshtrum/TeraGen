@@ -21,6 +21,10 @@ float* Transform::getRawMatrix() {
 	return m_transformMatrix.m;
 }
 
+Vector3& Transform::getTranslation() { return m_translation; }
+Vector3& Transform::getRotation() { return m_rotation; }
+Vector3& Transform::getScale() { return m_scale; }
+
 void Transform::setTranslation(float x, float y, float z) {
 	m_translation = Vector3(x, y, z);
 }

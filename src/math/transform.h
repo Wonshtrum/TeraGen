@@ -18,6 +18,10 @@ class Transform {
 		Matrix4& getMatrix();
 		float* getRawMatrix();
 
+		Vector3& getTranslation();
+		Vector3& getRotation();
+		Vector3& getScale();
+
 		void setTranslation(float x, float y, float z);
 		void setTranslation(Vector3 translation);
 

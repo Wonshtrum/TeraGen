@@ -23,6 +23,8 @@ class Mesh {
 
 		~Mesh();
 
+		unsigned int getNVertices();
+		void setNVertices(unsigned int nVertices);
 		float* getVertices();
 
 		void update();

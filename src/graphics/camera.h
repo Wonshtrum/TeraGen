@@ -2,6 +2,8 @@
 #define __CAMERA_H__
 
 #include "math/transform.h"
+#include "events/events.h"
+#include "macros.h"
 
 class Camera {
 	private:
@@ -22,6 +24,9 @@ class Camera {
 		Matrix4& getMatrix();
 
 		Transform& getTransform();
+
+		bool onKeyEvent(KeyPressEvent& event);
+		void onEvent(Event& event);
 };
 
 
