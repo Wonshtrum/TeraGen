@@ -50,6 +50,7 @@ int main(void) {
 		Shader* shaderColoredTexture = Shader::fromFile("src/assets/shaders/coloredTex.vs", "src/assets/shaders/coloredTex.fs");
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		Block limit = 0;
 		while (view.render()) {
 			view.clear();
 			shaderTexture->bind();
@@ -57,6 +58,8 @@ int main(void) {
 			chunk.draw();
 			shaderColoredTexture->bind();
 			mesh.draw();
+			limit++;
+			chunk.updateMesh(limit);
 		}
 	}
 	exit(EXIT_SUCCESS);

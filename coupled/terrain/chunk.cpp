@@ -144,7 +144,7 @@ class MarchingSquarre {
 	private:
 		Mesh* m_mesh;
 		Block* m_grid;
-		static Squarre s_squarres[6] = {{}, {0,7,1}, {0,7,2,2,7,3}, {0,6,4,4,2,0}, {0,6,5,5,3,0,0,3,2}, {0,7,1,5,4,3}};
+		static Squarre s_squarres[6] = {{}, {0,7,1}, {0,7,2,2,7,3}, {0,6,4,4,2,0}, {0,6,5,5,3,0,0,3,2}, {0,7,1,/*1,7,3,3,7,5,*/5,4,3}};
 		static unsigned int s_squarreId[16] =  {0, 1, 1, 2, 1, 2, 5, 4, 1, 5, 2, 4, 2, 4, 4, 3};
 		static unsigned int s_squarreRot[16] = {0, 0, 1, 0, 3, 3, 1, 0, 2, 0, 1, 1, 2, 3, 2, 0};
 	public:
@@ -155,7 +155,7 @@ class MarchingSquarre {
 			float* vertices = new float[CHUNK_SIZE*CHUNK_SIZE*maxTriangles*3*stride];
 			unsigned int* indices = new unsigned int[CHUNK_SIZE*CHUNK_SIZE*maxTriangles*3];
 			unsigned int i = 0;
-			LayeredNoise<PerlinNoise> noise(1, 0.5, 16.0/CHUNK_SIZE);
+			LayeredNoise<PerlinNoise> noise(5, 0.5, 4.0/CHUNK_SIZE);
 			for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
 				for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
 					m_grid[y*(CHUNK_SIZE+1)+x] = 127+127*noise.sample(x, y);
@@ -177,10 +177,10 @@ class MarchingSquarre {
 		}
 
 		int configuration(unsigned int x, unsigned int y, Block limit) {
-			int a = m_grid[(y+1)*CHUNK_SIZE+x] > limit ? 1 : 0;
-			int b = m_grid[(y+1)*CHUNK_SIZE+x+1] > limit ? 2 : 0;
-			int c = m_grid[y*CHUNK_SIZE+x] > limit ? 4 : 0;
-			int d = m_grid[y*CHUNK_SIZE+x+1] > limit ? 8 : 0;
+			int a = m_grid[(y+1)*(CHUNK_SIZE+1)+x] > limit ? 1 : 0;
+			int b = m_grid[(y+1)*(CHUNK_SIZE+1)+x+1] > limit ? 2 : 0;
+			int c = m_grid[y*(CHUNK_SIZE+1)+x] > limit ? 4 : 0;
+			int d = m_grid[y*(CHUNK_SIZE+1)+x+1] > limit ? 8 : 0;
 			return a+b+c+d;
 		}
 
@@ -189,10 +189,10 @@ class MarchingSquarre {
 		}
 
 		void coordinates(unsigned int x, unsigned int y, float* u, float* v, unsigned int index, unsigned int rotation, Block limit) {
-			int a = m_grid[(y+1)*CHUNK_SIZE+x];
-			int b = m_grid[(y+1)*CHUNK_SIZE+x+1];
-			int c = m_grid[y*CHUNK_SIZE+x];
-			int d = m_grid[y*CHUNK_SIZE+x+1];
+			int a = m_grid[(y+1)*(CHUNK_SIZE+1)+x];
+			int b = m_grid[(y+1)*(CHUNK_SIZE+1)+x+1];
+			int c = m_grid[y*(CHUNK_SIZE+1)+x];
+			int d = m_grid[y*(CHUNK_SIZE+1)+x+1];
 
 			index = (index+2*rotation)%8;
 			switch (index) {
