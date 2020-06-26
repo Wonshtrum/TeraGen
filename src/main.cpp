@@ -15,11 +15,8 @@ int main(void) {
 	{
 		Camera camera(0.9, 640, 480, 0.1, 1000);
 		Transform& t = camera.getTransform();
-		t.setTranslation(-0.2,-1,1);
-		t.setRotation(0.5,0.5,0.5);
-		t.setScale(2,2,2);
+		t.setTranslation(-0.5,-0.5,1.2);
 		t.calculate();
-		std::cout << t << std::endl;
 		camera.calculate();
 
 		View view(640, 480, "Simple example");
@@ -43,14 +40,13 @@ int main(void) {
 		};
 
 		Mesh mesh(vertices, 4, indices, 6, {{Float3}, {Float2}, {Float3}});
-		DenseChunk chunk = DenseChunk();
+		MarchingSquarre chunk;
 
 		Shader* shaderTexture = Shader::fromFile("src/assets/shaders/basicTex.vs", "src/assets/shaders/coloredTex.fs");
 		Shader* shaderColoredTexture = Shader::fromFile("src/assets/shaders/coloredTex.vs", "src/assets/shaders/coloredTex.fs");
 
-		double dx = 0;
-		double dy = 0;
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		Block limit = 150;
 		while (view.render()) {
 			view.clear();
 			shaderTexture->bind();
@@ -58,9 +54,8 @@ int main(void) {
 			chunk.draw();
 			shaderColoredTexture->bind();
 			mesh.draw();
-			dx += 0.001;
-			dy += 0.001;
-			//chunk.seedMesh(dx, dy);
+			limit += 1;
+			chunk.updateMesh(limit);
 		}
 	}
 	exit(EXIT_SUCCESS);

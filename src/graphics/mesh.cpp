@@ -16,7 +16,7 @@ Mesh::Mesh(float* vertices, unsigned int nVertices, unsigned int* indices, unsig
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, nIndices*sizeof(unsigned int), indices, GL_STATIC_DRAW);
 }
 
-Mesh::Mesh() {}
+Mesh::Mesh(): m_nVertices(0), m_nIndices(0), m_indices(NULL), m_vertices(NULL) {}
 
 Mesh::~Mesh() {
 	delete[] m_vertices;

@@ -64,7 +64,9 @@ def extract(program):
 			startTemplate = True
 			template = state+1
 			print(template)
-		elif beginWith(line, "//", "/*") or ((state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n"):
+		elif beginWith(line, "//", "/*"):
+			core += correctTabs(line, tabs)
+		elif (state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n":
 			if len(core) < 2 or core[-2] != "\n":
 				core += "\n"
 			if len(header) < 2 or header[-2] != "\n":

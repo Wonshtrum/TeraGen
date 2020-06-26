@@ -12,16 +12,17 @@ SRCPY := $(wildcard $(srcpy)*.cpp) $(wildcard $(srcpy)*/*.cpp)
 SRC := $(subst $(srcpy), $(srcdir), $(SRCPY)) $(srcdir)main.cpp
 HEAD := $(wildcard $(srcdir)*.h) $(wildcard $(srcdir)*/*.h)
 OBJ := $(subst $(srcdir), $(bindir), $(SRC:.cpp=.o))
+MAC := $(srcdir)macros.h
 PROG = Prog
 
 all = $(PROG)
 
-$(PROG) : $(SRC) $(OBJ)
+$(PROG) : $(SRC) $(HEAD) $(OBJ)
 	$(GPP) $(OBJ) -o $@ $(LIBS)
 
-$(bindir)%.o : $(srcdir)%.cpp
+$(bindir)%.o : $(srcdir)%.cpp $(MAC)
 	mkdir -p $(dir $@)
-	$(GOO) $^ -o $@
+	$(GOO) $(word 1, $^) -o $@
 
 $(srcdir)%.cpp : $(srcpy)%.cpp $(GPY)
 	mkdir -p $(dir $@)

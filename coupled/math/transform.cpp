@@ -19,7 +19,7 @@ class Transform {
 			Matrix4 translationMatrix = Matrix4().initTranslation(m_translation);
 			Matrix4 rotationMatrix = Matrix4().initRotation(m_rotation);
 			Matrix4 scaleMatrix = Matrix4().initScale(m_scale);
-			m_transformMatrix = translationMatrix*rotationMatrix*scaleMatrix;
+			m_transformMatrix = rotationMatrix*translationMatrix*scaleMatrix;
 		}
 
 		Matrix4& getMatrix() {

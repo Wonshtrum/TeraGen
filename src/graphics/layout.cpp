@@ -13,7 +13,7 @@ LayoutElement::LayoutElement(LayoutDataType type, bool normalized): m_normalized
 
 LayoutElement::LayoutElement() {}
 
-Layout::Layout() {}
+Layout::Layout(): m_elements(NULL), m_count(0), m_stride(0) {}
 
 Layout::Layout(std::initializer_list<LayoutElement> elements): m_count(elements.size()), m_stride(0) {
 	m_elements = new LayoutElement[m_count];

@@ -35,16 +35,16 @@ class Camera {
 			float speed = 0.01;
 			switch (event.getKeyCode()) {
 				case 263:
-					m_transform.getRotation().x += speed;
+					m_transform.getRotation().y -= speed;
 					break;
 				case 262:
-					m_transform.getRotation().x -= speed;
-					break;
-				case 265:
 					m_transform.getRotation().y += speed;
 					break;
+				case 265:
+					m_transform.getRotation().x += speed;
+					break;
 				case 264:
-					m_transform.getRotation().y -= speed;
+					m_transform.getRotation().x -= speed;
 					break;
 			}
 			m_transform.calculate();

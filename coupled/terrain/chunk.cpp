@@ -1,3 +1,4 @@
+#include <initializer_list>
 #include "graphics/mesh.h"
 #include "graphics/layout.h"
 #include "utils/noise.h"
@@ -89,13 +90,13 @@ class DenseChunk {
 					i++;
 				}
 			}
-			m_mesh = new Mesh(vertices, 4*i, indices, 6*i, {{Float3}, {Float2}});
+			m_mesh = new Mesh(vertices, 0, indices, 6*i, {{Float3}, {Float2}});
 			updateMesh();
 		}
 
 		~DenseChunk() {
 			delete m_mesh;
-			delete m_grid;
+			delete[] m_grid;
 		}
 
 		void updateMesh() {
@@ -119,6 +120,124 @@ class DenseChunk {
 				}
 			}
 			m_mesh->setNVertices(k);
+			m_mesh->update();
+		}
+
+		void draw() {
+			m_mesh->draw();
+		}
+};
+
+
+struct Squarre {
+	unsigned int nVertices;
+	unsigned int* vertices;
+	Squarre(std::initializer_list<unsigned int> vertices_): nVertices(vertices_.size()) {
+		vertices = new unsigned int[nVertices];
+		for (unsigned int i = 0 ; i < nVertices ; i++) {
+			vertices[i] = vertices_.begin()[i];
+		}
+	}
+};
+
+class MarchingSquarre {
+	private:
+		Mesh* m_mesh;
+		Block* m_grid;
+		static Squarre s_squarres[6] = {{}, {0,7,1}, {0,7,2,2,7,3}, {0,6,4,4,2,0}, {0,6,5,5,3,0,0,3,2}, {0,7,1,5,4,3}};
+		static unsigned int s_squarreId[16] =  {0, 1, 1, 2, 1, 2, 5, 4, 1, 5, 2, 4, 2, 4, 4, 3};
+		static unsigned int s_squarreRot[16] = {0, 0, 1, 0, 3, 3, 1, 0, 2, 0, 1, 1, 2, 3, 2, 0};
+	public:
+		MarchingSquarre() {
+			int stride = 5;
+			unsigned int maxTriangles = 3;
+			m_grid = new Block[(CHUNK_SIZE+1)*(CHUNK_SIZE+1)];
+			float* vertices = new float[CHUNK_SIZE*CHUNK_SIZE*maxTriangles*3*stride];
+			unsigned int* indices = new unsigned int[CHUNK_SIZE*CHUNK_SIZE*maxTriangles*3];
+			unsigned int i = 0;
+			double f = 16.0;
+			for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
+				for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
+					m_grid[y*(CHUNK_SIZE+1)+x] = (PerlinNoise::noise2D((f*x)/CHUNK_SIZE, (f*y)/CHUNK_SIZE)*127)+127;
+					if (x < CHUNK_SIZE && y < CHUNK_SIZE) {
+						for (unsigned int j = 0 ; j < maxTriangles*3 ; j++) {
+							indices[maxTriangles*3*i+j] = maxTriangles*3*i+j;
+						}
+						i++;
+					}
+				}
+			}
+			m_mesh = new Mesh(vertices, 0, indices, maxTriangles*3*i, {{Float3}, {Float2}});
+			updateMesh(0);
+		}
+
+		~MarchingSquarre() {
+			delete m_mesh;
+			delete[] m_grid;
+		}
+
+		int configuration(unsigned int x, unsigned int y, Block limit) {
+			int a = m_grid[(y+1)*CHUNK_SIZE+x] > limit ? 1 : 0;
+			int b = m_grid[(y+1)*CHUNK_SIZE+x+1] > limit ? 2 : 0;
+			int c = m_grid[y*CHUNK_SIZE+x] > limit ? 4 : 0;
+			int d = m_grid[y*CHUNK_SIZE+x+1] > limit ? 8 : 0;
+			return a+b+c+d;
+		}
+
+		float smooth(Block a, Block b, Block limit) {
+			return ((float)a-limit)/(a-b);
+		}
+
+		void coordinates(unsigned int x, unsigned int y, float* u, float* v, unsigned int index, unsigned int rotation, Block limit) {
+			int a = m_grid[(y+1)*CHUNK_SIZE+x];
+			int b = m_grid[(y+1)*CHUNK_SIZE+x+1];
+			int c = m_grid[y*CHUNK_SIZE+x];
+			int d = m_grid[y*CHUNK_SIZE+x+1];
+
+			index = (index+2*rotation)%8;
+			switch (index) {
+				case 0: *u = 0.0; *v = 1.0; return;
+				case 1: *u = smooth(a, b, limit); *v = 1.0; return;
+				case 2: *u = 1.0; *v = 1.0; return;
+				case 3: *u = 1.0; *v = smooth(d, b, limit); return;
+				case 4: *u = 1.0; *v = 0.0; return;
+				case 5: *u = smooth(c, d, limit); *v = 0.0; return;
+				case 6: *u = 0.0; *v = 0.0; return;
+				case 7: *u = 0.0; *v = smooth(c, a, limit); return;
+			}
+		}
+
+		void updateMesh(Block limit) {
+			int stride = 5;
+			float* mesh = m_mesh->getVertices();
+			int config;
+			unsigned int* vertices;
+			unsigned int nVertices;
+			unsigned int i = 0;
+			float u;
+			float v;
+			for (int x = 0 ; x < CHUNK_SIZE ; x++) {
+				for (int y = 0 ; y < CHUNK_SIZE ; y++) {
+					config = configuration(x, y, limit);
+					vertices = s_squarres[s_squarreId[config]].vertices;
+					nVertices = s_squarres[s_squarreId[config]].nVertices;
+					for (unsigned int j = 0 ; j < nVertices ; j++) {
+						coordinates(x, y, &u, &v, vertices[j], s_squarreRot[config], limit);
+						mesh[i*stride+0] = (u+x)/CHUNK_SIZE;
+						mesh[i*stride+1] = (v+y)/CHUNK_SIZE;
+						mesh[i*stride+2] = 0;
+						if ((x^y)&1) {
+							mesh[i*stride+3] = (u+x)/CHUNK_SIZE;
+							mesh[i*stride+4] = (v+y)/CHUNK_SIZE;
+						} else {
+							mesh[i*stride+3] = u;
+							mesh[i*stride+4] = v;
+						}
+						i++;
+					}
+				}
+			}
+			m_mesh->setNVertices(i);
 			m_mesh->update();
 		}
 
