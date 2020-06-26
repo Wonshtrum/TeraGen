@@ -36,12 +36,12 @@ LightChunk::~LightChunk() {
 
 void LightChunk::seedMesh(double dx, double dy) {
 	int i = 0;
-	double f = 4.0;
 	int stride = 5;
 	float* mesh = m_mesh->getVertices();
+	LayeredNoise<PerlinNoise> noise(2, 0.5, 4.0/CHUNK_SIZE, 2, dx, dy);
 	for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
 		for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
-			mesh[stride*i+2] = 0.5*PerlinNoise::noise2D((f*x)/CHUNK_SIZE+dx, (f*y)/CHUNK_SIZE+dy);
+			mesh[stride*i+2] = 0.5*noise.sample(x, y);
 			i++;
 		}
 	}
@@ -58,11 +58,11 @@ DenseChunk::DenseChunk() {
 	float* vertices = new float[CHUNK_SIZE*CHUNK_SIZE*4*stride];
 	unsigned int* indices = new unsigned int[CHUNK_SIZE*CHUNK_SIZE*6];
 	unsigned int i = 0;
-	double f = 4.0;
 	double z;
+	LayeredNoise<PerlinNoise> noise(3, 0.5, 4.0/CHUNK_SIZE);
 	for (int x = 0 ; x < CHUNK_SIZE ; x++) {
 		for (int y = 0 ; y < CHUNK_SIZE ; y++) {
-			z = PerlinNoise::noise2D((f*x)/CHUNK_SIZE, (f*y)/CHUNK_SIZE)*255;
+			z = 255*noise.sample(x, y);
 			m_grid[y*CHUNK_SIZE+x] = z > 0 ? z : 0;
 			indices[6*i+0] = 4*i+0;
 			indices[6*i+1] = 4*i+2;
@@ -127,10 +127,10 @@ MarchingSquarre::MarchingSquarre() {
 	float* vertices = new float[CHUNK_SIZE*CHUNK_SIZE*maxTriangles*3*stride];
 	unsigned int* indices = new unsigned int[CHUNK_SIZE*CHUNK_SIZE*maxTriangles*3];
 	unsigned int i = 0;
-	double f = 16.0;
+	LayeredNoise<PerlinNoise> noise(1, 0.5, 16.0/CHUNK_SIZE);
 	for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
 		for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
-			m_grid[y*(CHUNK_SIZE+1)+x] = (PerlinNoise::noise2D((f*x)/CHUNK_SIZE, (f*y)/CHUNK_SIZE)*127)+127;
+			m_grid[y*(CHUNK_SIZE+1)+x] = 127+127*noise.sample(x, y);
 			if (x < CHUNK_SIZE && y < CHUNK_SIZE) {
 				for (unsigned int j = 0 ; j < maxTriangles*3 ; j++) {
 					indices[maxTriangles*3*i+j] = maxTriangles*3*i+j;

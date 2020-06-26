@@ -51,7 +51,6 @@ def extract(program):
 	tabs = 0
 	for line in lines:
 		if template and not startTemplate and state == template-1:
-			print(state)
 			template = 0
 		if template or beginWith(line, "#include", "#define", "typedef", "using"):
 			header += line
@@ -63,7 +62,6 @@ def extract(program):
 			header += line
 			startTemplate = True
 			template = state+1
-			print(template)
 		elif beginWith(line, "//", "/*"):
 			core += correctTabs(line, tabs)
 		elif (state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n":
