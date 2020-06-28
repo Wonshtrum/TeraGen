@@ -12,7 +12,7 @@ double PerlinNoise::noise2D(double x,double y) {
 	int B1 = p[(X+1) & 255]+Y;
 	int B2 = p[B1 & 255];
 	int B3 = p[(B1+1) & 255];
-	return lerp(v,  lerp(u, grad(p[A2 & 255], x, y),
+	return 0.5+0.5*lerp(v,  lerp(u, grad(p[A2 & 255], x, y),
 				grad(p[B2 & 255], x-1, y)),
 			lerp(u, grad(p[A3 & 255], x, y-1),
 				grad(p[B3 & 255], x-1, y-1)));

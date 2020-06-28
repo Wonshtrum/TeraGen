@@ -13,7 +13,7 @@ class PerlinNoise {
 			int B1 = p[(X+1) & 255]+Y;
 			int B2 = p[B1 & 255];
 			int B3 = p[(B1+1) & 255];
-			return lerp(v,  lerp(u, grad(p[A2 & 255], x, y),
+			return 0.5+0.5*lerp(v,  lerp(u, grad(p[A2 & 255], x, y),
 						grad(p[B2 & 255], x-1, y)),
 					lerp(u, grad(p[A3 & 255], x, y-1),
 						grad(p[B3 & 255], x-1, y-1)));
@@ -50,7 +50,7 @@ class LayeredNoise {
 			double frequency = m_baseRoughness;
 			double amplitude = 1;
 			for (unsigned int i = 0 ; i < m_layers ; i++) {
-				value += Noise::noise2D(x*frequency+m_ox, y*frequency+m_oy)*amplitude;
+				value += Noise::noise2D((x+m_ox)*frequency, (y+m_oy)*frequency)*amplitude;
 				frequency *= m_roughness;
 				amplitude *= m_persistence;
 			}

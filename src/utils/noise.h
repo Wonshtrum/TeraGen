@@ -34,7 +34,7 @@ class LayeredNoise {
 			double frequency = m_baseRoughness;
 			double amplitude = 1;
 			for (unsigned int i = 0 ; i < m_layers ; i++) {
-				value += Noise::noise2D(x*frequency+m_ox, y*frequency+m_oy)*amplitude;
+				value += Noise::noise2D((x+m_ox)*frequency, (y+m_oy)*frequency)*amplitude;
 				frequency *= m_roughness;
 				amplitude *= m_persistence;
 			}

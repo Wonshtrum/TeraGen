@@ -7,10 +7,6 @@
 #include "utils/noise.h"
 #include "macros.h"
 
-void cb(Event& event) {
-	std::cout << event.getType() << std::endl;
-}
-
 int main(void) {
 	{
 		Camera camera(0.9, 640, 480, 0.1, 1000);
@@ -40,11 +36,9 @@ int main(void) {
 		};
 
 		Mesh mesh(vertices, 4, indices, 6, {{Float3}, {Float2}, {Float3}});
-		//LightChunk chunk;
-		//chunk.seedMesh(0,0);
-		//DenseChunk chunk;
-		MarchingSquarre chunk;
-		chunk.updateMesh(100);
+		//LightChunk chunk(0,0);
+		//DenseChunk chunk(0,0);
+		MarchingSquarre chunk(0,0);
 
 		Shader* shaderTexture = Shader::fromFile("src/assets/shaders/basicTex.vs", "src/assets/shaders/coloredTex.fs");
 		Shader* shaderColoredTexture = Shader::fromFile("src/assets/shaders/coloredTex.vs", "src/assets/shaders/coloredTex.fs");
@@ -58,8 +52,7 @@ int main(void) {
 			chunk.draw();
 			shaderColoredTexture->bind();
 			mesh.draw();
-			limit++;
-			chunk.updateMesh(limit);
+			chunk.setLimit(limit++);
 		}
 	}
 	exit(EXIT_SUCCESS);

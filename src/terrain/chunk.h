@@ -5,37 +5,39 @@
 #include "graphics/mesh.h"
 #include "graphics/layout.h"
 #include "utils/noise.h"
+#include "utils/file.h"
 #include "macros.h"
 
-typedef uint8_t Block;
-
-class LightChunk {
-	private:
-		Mesh* m_mesh;
-
-	public:
-		LightChunk();
-
-		~LightChunk();
-
-		void seedMesh(double dx, double dy);
-
-		void draw();
-};
-
-class DenseChunk {
-	private:
+class Chunk {
+	protected:
 		Mesh* m_mesh;
 		Block* m_grid;
+		unsigned int m_x;
+		unsigned int m_y;
+		LayeredNoise<PerlinNoise> m_noise;
 
 	public:
-		DenseChunk();
+		Chunk(unsigned int x, unsigned int y);
 
-		~DenseChunk();
+		virtual ~Chunk();
 
-		void updateMesh();
+		virtual void updateMesh() = 0;
 
-		void draw();
+		virtual void draw();
+};
+
+class LightChunk: public Chunk {
+	public:
+		LightChunk(unsigned int x, unsigned int y);
+
+		virtual void updateMesh();
+};
+
+class DenseChunk: public Chunk {	
+	public:
+		DenseChunk(unsigned int x, unsigned int y);
+
+		virtual void updateMesh();
 };
 
 struct Squarre {
@@ -44,27 +46,27 @@ struct Squarre {
 	Squarre(std::initializer_list<unsigned int> vertices_);
 };
 
-class MarchingSquarre {
+class MarchingSquarre: public Chunk {
 	private:
-		Mesh* m_mesh;
-		Block* m_grid;
 		static Squarre s_squarres[6];
 		static unsigned int s_squarreId[16];
 		static unsigned int s_squarreRot[16];
+		Block m_limit;
+
 	public:
-		MarchingSquarre();
+		MarchingSquarre(unsigned int x, unsigned int y);
 
-		~MarchingSquarre();
+		Block getLimit();
 
-		int configuration(unsigned int x, unsigned int y, Block limit);
+		void setLimit(Block limit);
 
-		float smooth(Block a, Block b, Block limit);
+		int configuration(unsigned int x, unsigned int y);
 
-		void coordinates(unsigned int x, unsigned int y, float* u, float* v, unsigned int index, unsigned int rotation, Block limit);
+		float smooth(Block a, Block b);
 
-		void updateMesh(Block limit);
+		void coordinates(unsigned int x, unsigned int y, float* u, float* v, unsigned int index, unsigned int rotation);
 
-		void draw();
+		virtual void updateMesh();
 };
 
 

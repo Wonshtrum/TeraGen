@@ -20,6 +20,36 @@ const char* readFile(const char* name) {
 	exit(EXIT_FAILURE);
 }
 
+const char* readFile(const char* name, int* size) {
+	char* content;
+
+	std::ifstream file(name);
+	if (file.is_open()) {
+		file.seekg(0, std::ios::end);
+		*size = file.tellg();
+		content = new char[*size];
+		file.seekg(0, std::ios::beg);
+		file.read(content, *size);
+		file.close();
+		return content;
+	}
+
+	std::cout << "Could not open file \"" << name << "\"" << std::endl;
+	exit(EXIT_FAILURE);
+}
+
+void writeFile(const char* name, char* buffer, int size) {
+	std::ofstream file(name);
+	if (file.is_open()) {
+		file.write(buffer, size);
+		file.close();
+		return;
+	}
+
+	std::cout << "Could not open file \"" << name << "\"" << std::endl;
+	exit(EXIT_FAILURE);
+}
+
 char* readImage(const char* name, unsigned int* width_, unsigned int* height_, unsigned int* channels_) {
 	int skipHeader = 8;
 	unsigned int channels = *channels_;
