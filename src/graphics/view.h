@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include "events/events.h"
 
-void error_callback(int error, const char* description);
+void error_callback(int code, const char* description);
 
 using EventCallback = std::function<void(Event&)>;
 struct GLFWHook {

@@ -18,7 +18,7 @@ Transform& Camera::getTransform() {
 }
 
 bool Camera::onKeyEvent(KeyPressEvent& event) {
-	//std::cout << event.getKeyCode() << std::endl;
+	//APP_TRACE(event.getKeyCode());
 	float speed = 0.02;
 	switch (event.getKeyCode()) {
 		case 263:

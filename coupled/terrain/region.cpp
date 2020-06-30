@@ -12,7 +12,7 @@ class Region {
 		Region(const char* file) {
 			int size;
 			m_data = (Block*)readFile(file, &size);
-			std::cout << size << std::endl;
+			CORE_TRACE(size);
 			int nodeSize = s_regionSize+2;
 			m_nChunks = size/nodeSize;
 			m_chunkList = new ChunkId[m_nChunks];

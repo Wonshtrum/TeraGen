@@ -49,9 +49,10 @@ class Logger {
 		void log(LogLevel level, const char* file, int line, T... param) {
 			if (level >= m_level) {
 				header(level, file, line);
-				int a[] = {(std::cout << param,0)...};
+				int a[] = {(std::cerr << param,0)...};
 				if (a) {}
-				std::cout << END << std::endl;
+				std::cout << END;
+				std::cerr << std::endl;
 			}
 		}
 
@@ -68,9 +69,7 @@ class Logger {
 class LOG {
 	private:
 		static Logger* s_coreLogger;
-;
 		static Logger* s_appLogger;
-;
 
 	public:
 		static void init();

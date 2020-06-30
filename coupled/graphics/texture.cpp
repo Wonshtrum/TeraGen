@@ -48,7 +48,7 @@ class Texture {
 		}
 
 		void print() {
-			std::cout << m_width << "/" << m_height << "/" << m_channels << std::endl;
+			APP_DEBUG(m_width, "/", m_height, "/", m_channels);
 			for (unsigned int y = 0 ; y < m_height ; y+=2) {
 				for (unsigned int x = 0 ; x < m_width ; x++) {
 					std::cout << "\x1B[48;2";

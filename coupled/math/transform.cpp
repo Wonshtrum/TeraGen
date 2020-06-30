@@ -58,6 +58,5 @@ class Transform {
 };
 
 std::ostream& operator<<(std::ostream& out, Transform& transform) {
-	out << transform.m_transformMatrix;
-	return out;
+	return out << transform.m_transformMatrix;
 }

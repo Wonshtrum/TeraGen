@@ -49,27 +49,17 @@ class Logger {
 			while (m_prompt[i]) {
 				if (mod) {
 					switch (m_prompt[i]) {
-						case 'N':
-							std::cout << m_name;
-							break;
-						case 'L':
-							std::cout << m_levelCode[level];
-							break;
-						case 'f':
-							std::cout << file;
-							break;
-						case 'l':
-							std::cout << line;
-							break;
-						default:
-							std::cout << m_prompt[i];
-							break;
+						case 'N': std::cerr << m_name; break;
+						case 'L': std::cerr << m_levelCode[level]; break;
+						case 'f': std::cerr << file; break;
+						case 'l': std::cerr << line; break;
+						default : std::cerr << m_prompt[i]; break;
 					}
 					mod = false;
 				} else if (m_prompt[i] == '%') {
 					mod = true;
 				} else {
-					std::cout << m_prompt[i];
+					std::cerr << m_prompt[i];
 				}
 				i++;
 			}
@@ -79,9 +69,10 @@ class Logger {
 		void log(LogLevel level, const char* file, int line, T... param) {
 			if (level >= m_level) {
 				header(level, file, line);
-				int a[] = {(std::cout << param,0)...};
+				int a[] = {(std::cerr << param,0)...};
 				if (a) {}
-				std::cout << END << std::endl;
+				std::cout << END;
+				std::cerr << std::endl;
 			}
 		}
 

@@ -16,7 +16,7 @@ const char* readFile(const char* name) {
 		return content;
 	}
 
-	std::cout << "Could not open file \"" << name << "\"" << std::endl;
+	CORE_CRITIC("Could not open file \"", name, "\"");
 	exit(EXIT_FAILURE);
 }
 
@@ -34,7 +34,7 @@ const char* readFile(const char* name, int* size) {
 		return content;
 	}
 
-	std::cout << "Could not open file \"" << name << "\"" << std::endl;
+	CORE_CRITIC("Could not open file \"", name, "\"");
 	exit(EXIT_FAILURE);
 }
 
@@ -46,7 +46,7 @@ void writeFile(const char* name, char* buffer, int size) {
 		return;
 	}
 
-	std::cout << "Could not open file \"" << name << "\"" << std::endl;
+	CORE_CRITIC("Could not open file \"", name, "\"");
 	exit(EXIT_FAILURE);
 }
 
@@ -66,7 +66,7 @@ char* readImage(const char* name, unsigned int* width_, unsigned int* height_, u
 		file.seekg(skipHeader);
 		PNGChunk ihdr(file);
 		if (!ihdr.is("IHDR")) {
-			std::cout << "Bad format \"" << name << "\"" << std::endl;
+			CORE_CRITIC("Bad format \"", name, "\"");
 			exit(EXIT_FAILURE);
 		}
 
@@ -75,7 +75,7 @@ char* readImage(const char* name, unsigned int* width_, unsigned int* height_, u
 		char flags[5];
 		file.read(flags, 5);
 		if ((flags[1] != 2 && flags[1] != 6) || flags[2] || flags[3] || flags[4]) {
-			std::cout << "Unsupported format \"" << name << "\"" << std::endl;
+			CORE_CRITIC("Unsupported format \"", name, "\"");
 		}
 		pad = flags[1] == 2 ? 3 : 4;
 		if (channels == 0) {
@@ -118,6 +118,7 @@ char* readImage(const char* name, unsigned int* width_, unsigned int* height_, u
 		}
 		return image;
 	}
-	std::cout << "Could not open file \"" << name << "\"" << std::endl;
+
+	CORE_CRITIC("Could not open file \"", name, "\"");
 	exit(EXIT_FAILURE);
 }

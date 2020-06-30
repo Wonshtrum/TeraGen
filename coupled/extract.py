@@ -82,7 +82,10 @@ def extract(program):
 				proto, _, impl = line.partition(" = ")
 			protoClean, _, init = proto.replace("::", "##").partition(":")
 			protoClean = protoClean.replace("##", "::")
-			header += protoClean+";\n"
+			if len(protoClean) >= 2 and protoClean[-2] == ";":
+				header += protoClean
+			else:
+				header += protoClean+";\n"
 			if "=" in protoClean:
 				protoClean = protoClean.replace("\t", "")
 				frags = protoClean.split(" = ")

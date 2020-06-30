@@ -2,8 +2,8 @@
 #include <GLFW/glfw3.h>
 #include "events/events.h"
 
-void error_callback(int error, const char* description) {
-	std::cerr << description << std::endl;
+void error_callback(int code, const char* description) {
+	CORE_ERROR("code: ", code, "\n", description);
 }
 
 void setWindowEventsCallback(GLFWwindow* window);
@@ -49,7 +49,7 @@ class View {
 			if (glewInit()!=GLEW_OK)
 				exit(EXIT_FAILURE);
 
-			std::cout << glGetString(GL_VERSION) << std::endl;
+			CORE_TRACE(glGetString(GL_VERSION));
 			glDisable(GL_BLEND);
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);

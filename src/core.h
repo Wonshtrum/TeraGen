@@ -22,17 +22,17 @@ typedef uint16_t ChunkId;
 	#define CORE_TRACE(...)  LOG::getCoreLogger()->log(trace, __FILE__, __LINE__, __VA_ARGS__)
 	#define CORE_DEBUG(...)  LOG::getCoreLogger()->log(debug, __FILE__, __LINE__, __VA_ARGS__)
 	#define CORE_INFO(...)   LOG::getCoreLogger()->log(info, __FILE__, __LINE__, __VA_ARGS__)
-	#define CORE_WARN(...)   LOG::getCoreLogger()->log(warn, __FILE__, __LINE__, __VA_ARGS__)
+	#define CORE_WARN(...)   LOG::getCoreLogger()->log(warning, __FILE__, __LINE__, __VA_ARGS__)
 	#define CORE_ERROR(...)  LOG::getCoreLogger()->log(error, __FILE__, __LINE__, __VA_ARGS__)
-	#define CORE_CRITIC(...) LOG::getCoreLogger()->log(critic, __FILE__, __LINE__, __VA_ARGS__)
+	#define CORE_CRITIC(...) LOG::getCoreLogger()->log(critical, __FILE__, __LINE__, __VA_ARGS__)
 
 	#define APP_LOGGER      LOG::getAppLogger()
 	#define APP_TRACE(...)  LOG::getAppLogger()->log(trace, __FILE__, __LINE__, __VA_ARGS__)
 	#define APP_DEBUG(...)  LOG::getAppLogger()->log(debug, __FILE__, __LINE__, __VA_ARGS__)
 	#define APP_INFO(...)   LOG::getAppLogger()->log(info, __FILE__, __LINE__, __VA_ARGS__)
-	#define APP_WARN(...)   LOG::getAppLogger()->log(warn, __FILE__, __LINE__, __VA_ARGS__)
+	#define APP_WARN(...)   LOG::getAppLogger()->log(warning, __FILE__, __LINE__, __VA_ARGS__)
 	#define APP_ERROR(...)  LOG::getAppLogger()->log(error, __FILE__, __LINE__, __VA_ARGS__)
-	#define APP_CRITIC(...) LOG::getAppLogger()->log(critic, __FILE__, __LINE__, __VA_ARGS__)
+	#define APP_CRITIC(...) LOG::getAppLogger()->log(critical, __FILE__, __LINE__, __VA_ARGS__)
 
 	#define CORE_ASSERT(x, ...) { if (!(x)) { CORE_CRITIC("Assertion Failed: " __VA_ARGS__); exit(EXIT_FAILURE); }
 	#define CORE_ASSERT_NOT(x, ...) { if (x) { CORE_CRITIC("Assertion Failed: " __VA_ARGS__); exit(EXIT_FAILURE); }

@@ -8,8 +8,7 @@ struct Vector3 {
 };
 
 std::ostream& operator<<(std::ostream& out, Vector3&& vector) {
-	std::cout << "[" << vector.x << ", " << vector.y << ", " << vector.z << "]";
-	return out;
+	return out << "[" << vector.x << ", " << vector.y << ", " << vector.z << "]";
 }
 std::ostream& operator<<(std::ostream& out, Vector3& vector) {
 	return out << (Vector3&&)vector;

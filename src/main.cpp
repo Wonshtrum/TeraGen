@@ -10,7 +10,8 @@
 
 int main(void) {
 	LOG::init();
-	CORE_LOGGER->setPrompt("%L[%f(%l)]%N: ");
+	CORE_LOGGER->setPrompt("[%f(%l)]%N: ");
+	APP_LOGGER->setPrompt("[%f(%l)]%N: ");
 	{
 		Camera camera(0.9, 640, 480, 0.01, 1000);
 		Transform& t = camera.getTransform();
