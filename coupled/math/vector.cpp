@@ -1,5 +1,3 @@
-#include <iostream>
-
 struct Vector3 {
 	float x;
 	float y;

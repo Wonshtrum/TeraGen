@@ -1,6 +1,4 @@
 #include <GL/glew.h>
-#include <iostream>
-#include <fstream>
 #include "utils/file.h"
 #include "math/matrix.h"
 #include "math/vector.h"

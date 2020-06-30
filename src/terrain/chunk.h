@@ -1,12 +1,11 @@
 #ifndef __CHUNK_H__
 #define __CHUNK_H__
 
-#include <initializer_list>
+#include "core.h"
 #include "graphics/mesh.h"
 #include "graphics/layout.h"
 #include "utils/noise.h"
 #include "utils/file.h"
-#include "macros.h"
 
 class Chunk {
 	protected:
@@ -30,12 +29,16 @@ class LightChunk: public Chunk {
 	public:
 		LightChunk(unsigned int x, unsigned int y);
 
+		static constexpr unsigned int getSize() { return CHUNK_SIZE+1; }
+
 		virtual void updateMesh();
 };
 
 class DenseChunk: public Chunk {	
 	public:
 		DenseChunk(unsigned int x, unsigned int y);
+
+		static constexpr unsigned int getSize() { return CHUNK_SIZE; }
 
 		virtual void updateMesh();
 };
@@ -55,6 +58,8 @@ class MarchingSquarre: public Chunk {
 
 	public:
 		MarchingSquarre(unsigned int x, unsigned int y);
+
+		static constexpr unsigned int getSize() { return CHUNK_SIZE+1; }
 
 		Block getLimit();
 

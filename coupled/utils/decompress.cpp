@@ -1,9 +1,4 @@
-#include <fstream>
-#include <iostream>
-#include <string.h>
 #include <zlib.h>
-#include <stdlib.h>
-#define CHUNK 32768
 
 void filter(uint8_t* buffer, unsigned int scanLine, unsigned int pad, unsigned int position, char type, bool priorH = true, bool priorV = true) {
 	uint8_t null = 0;
@@ -54,8 +49,8 @@ bool autoInflate(char** buffer_, unsigned int* size_) {
 	int ret;
 	unsigned int have;
 	z_stream strm;
-	unsigned char in[CHUNK];
-	unsigned char out[CHUNK];
+	unsigned char in[DEFLATE_CHUNK];
+	unsigned char out[DEFLATE_CHUNK];
 
 	strm.zalloc = Z_NULL;
 	strm.zfree = Z_NULL;
@@ -74,7 +69,7 @@ bool autoInflate(char** buffer_, unsigned int* size_) {
 	}
 
 	do {
-		strm.avail_in = size > CHUNK ? CHUNK : size;
+		strm.avail_in = size > DEFLATE_CHUNK ? DEFLATE_CHUNK : size;
 		memcpy(in, source+posIn, strm.avail_in);
 		size -= strm.avail_in;
 		posIn += strm.avail_in;
@@ -83,7 +78,7 @@ bool autoInflate(char** buffer_, unsigned int* size_) {
 		}
 		strm.next_in = in;
 		do {
-			strm.avail_out = CHUNK;
+			strm.avail_out = DEFLATE_CHUNK;
 			strm.next_out = out;
 			ret = inflate(&strm, Z_NO_FLUSH);
 			switch (ret) {
@@ -95,7 +90,7 @@ bool autoInflate(char** buffer_, unsigned int* size_) {
 					return false;
 			}
 
-			have = CHUNK-strm.avail_out;
+			have = DEFLATE_CHUNK-strm.avail_out;
 			if (posOut+have >= fill) {
 				fill = posOut+have+size*2;
 				char* tmp = new char[fill+1];

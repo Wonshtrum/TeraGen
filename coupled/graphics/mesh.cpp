@@ -1,5 +1,4 @@
 #include <GL/glew.h>
-#include <iostream>
 #include "layout.h"
 
 class Mesh {
@@ -34,6 +33,9 @@ class Mesh {
 		~Mesh() {
 			delete[] m_vertices;
 			delete[] m_indices;
+			glDeleteVertexArrays(1, &m_vao);
+			glDeleteBuffers(1, &m_abo);
+			glDeleteBuffers(1, &m_ibo);
 		}
 
 		unsigned int getNVertices() { return m_nVertices; }

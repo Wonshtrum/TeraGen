@@ -1,5 +1,3 @@
-#include <functional>
-
 enum EventType {
 	None = 0,
 	WindowClose, WindowResize, WindowFocus, WindowLoseFocus, WindowMove,

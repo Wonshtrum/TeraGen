@@ -1,6 +1,5 @@
 #include "math/transform.h"
 #include "events/events.h"
-#include "macros.h"
 
 class Camera {
 	private:
@@ -31,8 +30,8 @@ class Camera {
 		}
 
 		bool onKeyEvent(KeyPressEvent& event) {
-			std::cout << event.getKeyCode() << std::endl;
-			float speed = 0.01;
+			//std::cout << event.getKeyCode() << std::endl;
+			float speed = 0.02;
 			switch (event.getKeyCode()) {
 				case 263:
 					m_transform.getRotation().y -= speed;

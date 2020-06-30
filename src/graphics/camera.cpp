@@ -18,8 +18,8 @@ Transform& Camera::getTransform() {
 }
 
 bool Camera::onKeyEvent(KeyPressEvent& event) {
-	std::cout << event.getKeyCode() << std::endl;
-	float speed = 0.01;
+	//std::cout << event.getKeyCode() << std::endl;
+	float speed = 0.02;
 	switch (event.getKeyCode()) {
 		case 263:
 			m_transform.getRotation().y -= speed;

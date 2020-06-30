@@ -1,5 +1,4 @@
 #include <GL/glew.h>
-#include <iostream>
 #include "utils/file.h"
 
 class Texture {
@@ -32,7 +31,10 @@ class Texture {
 			applyPixels(m_pixels);
 		}
 
-		~Texture() { delete[] m_pixels; }
+		~Texture() {
+			delete[] m_pixels;
+			glDeleteTextures(1, &m_id);
+		}
 
 		static Texture* createBlank(unsigned int channels = 4) {
 			char full = (char)255;

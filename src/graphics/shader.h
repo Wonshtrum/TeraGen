@@ -1,9 +1,8 @@
 #ifndef __SHADER_H__
 #define __SHADER_H__
 
+#include "core.h"
 #include <GL/glew.h>
-#include <iostream>
-#include <fstream>
 #include "utils/file.h"
 #include "math/matrix.h"
 #include "math/vector.h"

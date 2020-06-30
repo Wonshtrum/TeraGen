@@ -1,5 +1,4 @@
 #include <GL/glew.h>
-#include <initializer_list>
 
 enum LayoutDataType {
 	Float,

@@ -1,6 +1,7 @@
 #ifndef __TRANSFORM_H__
 #define __TRANSFORM_H__
 
+#include "core.h"
 #include "vector.h"
 #include "matrix.h"
 

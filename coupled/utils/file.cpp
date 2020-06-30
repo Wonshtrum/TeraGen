@@ -1,5 +1,3 @@
-#include <fstream>
-#include <iostream>
 #include "decompress.h"
 
 const char* readFile(const char* name) {

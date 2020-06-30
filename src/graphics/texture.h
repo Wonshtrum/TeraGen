@@ -1,8 +1,8 @@
 #ifndef __TEXTURE_H__
 #define __TEXTURE_H__
 
+#include "core.h"
 #include <GL/glew.h>
-#include <iostream>
 #include "utils/file.h"
 
 class Texture {

@@ -1,8 +1,8 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
+#include "core.h"
 #include <GL/glew.h>
-#include <iostream>
 #include "layout.h"
 
 class Mesh {

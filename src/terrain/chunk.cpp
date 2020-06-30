@@ -2,7 +2,7 @@
 
 
 Chunk::Chunk(unsigned int x, unsigned int y): m_x(x), m_y(y) {
-	m_noise = LayeredNoise<PerlinNoise>(1, 0.5, 4.0/CHUNK_SIZE, 2, x, y);
+	m_noise = LayeredNoise<PerlinNoise>(5, 0.5, 4.0/CHUNK_SIZE, 2, x, y);
 }
 
 Chunk::~Chunk() {
@@ -52,7 +52,7 @@ void LightChunk::updateMesh() {
 	float* mesh = m_mesh->getVertices();
 	for (int x = 0 ; x <= CHUNK_SIZE ; x++) {
 		for (int y = 0 ; y <= CHUNK_SIZE ; y++) {
-			mesh[stride*i+2] = m_grid[i]/511.0;
+			mesh[stride*i+2] = m_grid[i]/255.0;
 			i++;
 		}
 	}
@@ -94,7 +94,7 @@ void DenseChunk::updateMesh() {
 					for (int j = 0 ; j < 2 ; j++) {
 						mesh[stride*k+0] = (x+i)*1.0/CHUNK_SIZE;
 						mesh[stride*k+1] = (y+j)*1.0/CHUNK_SIZE;
-						mesh[stride*k+2] = -0.5*m_grid[(y+j)*CHUNK_SIZE+x+i]/255.0;
+						mesh[stride*k+2] = m_grid[(y+j)*CHUNK_SIZE+x+i]/255.0;
 						mesh[stride*k+3] = i;
 						mesh[stride*k+4] = j;
 						k++;

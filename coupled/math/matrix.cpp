@@ -1,5 +1,3 @@
-#include <iostream>
-#include <math.h>
 #include "vector.h"
 #define m(x, y) m[4*y+x]
 

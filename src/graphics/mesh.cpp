@@ -21,6 +21,9 @@ Mesh::Mesh(): m_nVertices(0), m_nIndices(0), m_indices(NULL), m_vertices(NULL) {
 Mesh::~Mesh() {
 	delete[] m_vertices;
 	delete[] m_indices;
+	glDeleteVertexArrays(1, &m_vao);
+	glDeleteBuffers(1, &m_abo);
+	glDeleteBuffers(1, &m_ibo);
 }
 
 unsigned int Mesh::getNVertices() { return m_nVertices; }

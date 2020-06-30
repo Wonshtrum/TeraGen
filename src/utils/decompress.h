@@ -1,12 +1,8 @@
 #ifndef __DECOMPRESS_H__
 #define __DECOMPRESS_H__
 
-#include <fstream>
-#include <iostream>
-#include <string.h>
+#include "core.h"
 #include <zlib.h>
-#include <stdlib.h>
-#define CHUNK 32768
 
 void filter(uint8_t* buffer, unsigned int scanLine, unsigned int pad, unsigned int position, char type, bool priorH = true, bool priorV = true);
 

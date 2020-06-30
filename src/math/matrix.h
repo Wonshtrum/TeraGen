@@ -1,8 +1,7 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
-#include <iostream>
-#include <math.h>
+#include "core.h"
 #include "vector.h"
 #define m(x, y) m[4*y+x]
 

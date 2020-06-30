@@ -9,6 +9,7 @@ def templates(program):
 	headerTemplate = """#ifndef __{0}_H__
 #define __{0}_H__
 
+#include "core.h"
 {1}
 
 #endif""".format(NAME, "{}")
@@ -64,12 +65,14 @@ def extract(program):
 			template = state+1
 		elif beginWith(line, "//", "/*"):
 			core += correctTabs(line, tabs)
+		elif nameSpace and "constexpr" in line:
+			header += line
 		elif (state == 0 or (state == 1 and nameSpace)) and line.replace(" ", "").replace("\t", "") == "\n":
 			if len(core) < 2 or core[-2] != "\n":
 				core += "\n"
 			if len(header) < 2 or header[-2] != "\n":
 				header += "\n"
-		elif (state == 0 or (state == 1 and nameSpace)) and (("{" in line and "[](" not in line) or beginWith(line, "static ")):
+		elif (state == 0 or (state == 1 and nameSpace)) and (("{" in line and "[](" not in line and "] = {" not in line) or beginWith(line, "static ")):
 			tabs = findTabs(line)
 			if ") {" in line:
 				proto, _, impl = line.partition(" {")

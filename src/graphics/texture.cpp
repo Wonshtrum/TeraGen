@@ -22,7 +22,10 @@ Texture::Texture(char* pixels, unsigned int width, unsigned int height, unsigned
 	applyPixels(m_pixels);
 }
 
-Texture::~Texture() { delete[] m_pixels; }
+Texture::~Texture() {
+	delete[] m_pixels;
+	glDeleteTextures(1, &m_id);
+}
 
 Texture* Texture::createBlank(unsigned int channels) {
 	char full = (char)255;

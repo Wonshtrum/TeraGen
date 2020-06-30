@@ -1,7 +1,5 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <functional>
 #include "events/events.h"
 
 void error_callback(int error, const char* description) {

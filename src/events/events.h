@@ -1,8 +1,7 @@
 #ifndef __EVENTS_H__
 #define __EVENTS_H__
 
-#include <functional>
-
+#include "core.h"
 enum EventType {
 	None = 0,
 	WindowClose, WindowResize, WindowFocus, WindowLoseFocus, WindowMove,

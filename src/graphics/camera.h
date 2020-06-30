@@ -1,9 +1,9 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
+#include "core.h"
 #include "math/transform.h"
 #include "events/events.h"
-#include "macros.h"
 
 class Camera {
 	private:
