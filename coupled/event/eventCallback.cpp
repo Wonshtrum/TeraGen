@@ -1,11 +1,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "events.h"
+#include "event.h"
 #include "graphics/view.h"
 
 #define GET_HOOK GLFWHook& hook = *(GLFWHook*)glfwGetWindowUserPointer(window)
-
-struct GLFWHook;
 
 void setWindowEventsCallback(GLFWwindow* window) {
 	glfwSetWindowCloseCallback(window, [](GLFWwindow* window) {

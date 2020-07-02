@@ -1,5 +1,5 @@
-#ifndef __EVENTS_H__
-#define __EVENTS_H__
+#ifndef __EVENT_H__
+#define __EVENT_H__
 
 #include "core.h"
 enum EventType {

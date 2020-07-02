@@ -1,5 +1,6 @@
+#include <GL/glew.h>
 #include "math/transform.h"
-#include "events/events.h"
+#include "event/event.h"
 
 class Camera {
 	private:
@@ -14,7 +15,7 @@ class Camera {
 
 	public:
 		Camera(float fov, float width, float height, float zNear, float zFar): m_fov(fov), m_width(width), m_height(height), m_zNear(zNear), m_zFar(zFar) {
-				m_projectionMatrix = Matrix4().initProjection(fov, width, height, zNear, zFar);
+			m_projectionMatrix = Matrix4().initProjection(fov, width, height, zNear, zFar);
 		}
 		
 		void calculate() {
@@ -31,26 +32,18 @@ class Camera {
 
 		bool onKeyEvent(KeyPressEvent& event) {
 			//APP_TRACE(event.getKeyCode());
-			float speed = 0.02;
-			switch (event.getKeyCode()) {
-				case 263:
-					m_transform.getRotation().y -= speed;
-					break;
-				case 262:
-					m_transform.getRotation().y += speed;
-					break;
-				case 265:
-					m_transform.getRotation().x += speed;
-					break;
-				case 264:
-					m_transform.getRotation().x -= speed;
-					break;
-			}
-			m_transform.calculate();
+			return true;
+		}
+		bool onResizeEvent(WindowResizeEvent& event) {
+			m_width = event.getWidth();
+			m_height = event.getHeight();
+			m_projectionMatrix.initProjection(m_fov, m_width, m_height, m_zNear, m_zFar);
 			calculate();
-			return false;
+			glViewport(0, 0, m_width, m_height);
+			return true;
 		}
 		void onEvent(Event& event) {
 			dispatch<KeyPressEvent>(event, M_BIND(Camera::onKeyEvent));
+			dispatch<WindowResizeEvent>(event, M_BIND(Camera::onResizeEvent));
 		}
 };

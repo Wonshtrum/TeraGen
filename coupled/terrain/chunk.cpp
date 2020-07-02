@@ -13,7 +13,7 @@ class Chunk {
 
 	public:
 		Chunk(unsigned int x, unsigned int y): m_x(x), m_y(y) {
-			m_noise = LayeredNoise<PerlinNoise>(5, 0.5, 4.0/CHUNK_SIZE, 2, x, y);
+			m_noise = LayeredNoise<PerlinNoise>(3, 0.5, 4.0/CHUNK_SIZE, 2, x, y);
 		}
 
 		virtual ~Chunk() {

@@ -20,7 +20,7 @@ void View::s_GLFWInit() {
 	s_GLFWInitialized = true;
 }
 
-View::View(int width, int height, const char* title): width(width), m_height(height) {
+View::View(int width, int height, const char* title): m_width(width), m_height(height) {
 	s_GLFWInit();
 
 	m_window = glfwCreateWindow(width, m_height, title, NULL, NULL);
@@ -28,6 +28,7 @@ View::View(int width, int height, const char* title): width(width), m_height(hei
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
+	Inputs::setWindow(m_window);
 
 	bind();
 	glfwSwapInterval(1);
@@ -41,7 +42,7 @@ View::View(int width, int height, const char* title): width(width), m_height(hei
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glClearColor(0.0, 1.0, 0.0, 1.0);
-	glViewport(0, 0, width, m_height);
+	glViewport(0, 0, m_width, m_height);
 
 	glfwSetWindowUserPointer(m_window, &m_hook);
 	setWindowEventsCallback(m_window);

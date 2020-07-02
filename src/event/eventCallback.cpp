@@ -1,4 +1,4 @@
-#include "eventsCallback.h"
+#include "eventCallback.h"
 
 
 void setWindowEventsCallback(GLFWwindow* window) {

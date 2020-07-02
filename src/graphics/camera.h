@@ -2,8 +2,9 @@
 #define __CAMERA_H__
 
 #include "core.h"
+#include <GL/glew.h>
 #include "math/transform.h"
-#include "events/events.h"
+#include "event/event.h"
 
 class Camera {
 	private:
@@ -26,6 +27,7 @@ class Camera {
 		Transform& getTransform();
 
 		bool onKeyEvent(KeyPressEvent& event);
+		bool onResizeEvent(WindowResizeEvent& event);
 		void onEvent(Event& event);
 };
 

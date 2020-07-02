@@ -4,7 +4,8 @@
 #include "core.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "events/events.h"
+#include "event/event.h"
+#include "event/eventPolling.h"
 
 void error_callback(int code, const char* description);
 
@@ -16,7 +17,7 @@ struct GLFWHook {
 class View {
 	private:
 		static bool s_GLFWInitialized;
-		int width;
+		int m_width;
 		int m_height;		
 		GLFWwindow* m_window;
 		GLFWHook m_hook;

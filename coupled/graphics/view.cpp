@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "events/events.h"
+#include "event/event.h"
+#include "event/eventPolling.h"
 
 void error_callback(int code, const char* description) {
 	CORE_ERROR("code: ", code, "\n", description);
@@ -16,7 +17,7 @@ struct GLFWHook {
 class View {
 	private:
 		static bool s_GLFWInitialized = false;
-		int width;
+		int m_width;
 		int m_height;		
 		GLFWwindow* m_window;
 		GLFWHook m_hook;
@@ -34,7 +35,7 @@ class View {
 		}
 
 	public:
-		View(int width, int height, const char* title): width(width), m_height(height) {
+		View(int width, int height, const char* title): m_width(width), m_height(height) {
 			s_GLFWInit();
 
 			m_window = glfwCreateWindow(width, m_height, title, NULL, NULL);
@@ -42,6 +43,7 @@ class View {
 				glfwTerminate();
 				exit(EXIT_FAILURE);
 			}
+			Inputs::setWindow(m_window);
 
 			bind();
 			glfwSwapInterval(1);
@@ -55,7 +57,7 @@ class View {
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 			glClearColor(0.0, 1.0, 0.0, 1.0);
-			glViewport(0, 0, width, m_height);
+			glViewport(0, 0, m_width, m_height);
 
 			glfwSetWindowUserPointer(m_window, &m_hook);
 			setWindowEventsCallback(m_window);

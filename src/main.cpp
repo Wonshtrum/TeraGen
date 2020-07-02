@@ -7,6 +7,7 @@
 #include "terrain/chunk.h"
 #include "terrain/region.h"
 #include "utils/noise.h"
+#include "event/eventPolling.h"
 
 int main(void) {
 	LOG::init();
@@ -38,12 +39,51 @@ int main(void) {
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		Block limit = 0;
+		bool pressed;
+		float speed = 0.02;
 		while (view.render()) {
 			view.clear();
 			shaderTexture->bind();
 			shaderTexture->uploadUniform("u_transform", camera.getMatrix());
 			chunk.draw();
 			chunk.setLimit(limit++);
+			pressed = false;
+			if (Inputs::isKeyPressed(263)) {
+				pressed = true;
+				t.getRotation().y -= speed;
+			}
+			if (Inputs::isKeyPressed(262)) {
+				pressed = true;
+				t.getRotation().y += speed;
+			}
+			if (Inputs::isKeyPressed(265)) {
+				pressed = true;
+				t.getRotation().x += speed;
+			}
+			if (Inputs::isKeyPressed(264)) {
+				pressed = true;
+				t.getRotation().x -= speed;
+			}
+			if (Inputs::isKeyPressed(65)) {
+				pressed = true;
+				t.getTranslation().x += speed;
+			}
+			if (Inputs::isKeyPressed(68)) {
+				pressed = true;
+				t.getTranslation().x -= speed;
+			}
+			if (Inputs::isKeyPressed(87)) {
+				pressed = true;
+				t.getTranslation().z -= speed;
+			}
+			if (Inputs::isKeyPressed(83)) {
+				pressed = true;
+				t.getTranslation().z += speed;
+			}
+			if (pressed) {
+				t.calculate();
+				camera.calculate();
+			}
 		}
 	}
 	LOG::terminate();
